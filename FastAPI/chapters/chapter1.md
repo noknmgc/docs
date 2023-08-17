@@ -1,6 +1,9 @@
 # FastAPI はじめのステップ
 
+## 目次
+
 - [FastAPI はじめのステップ](#fastapi-はじめのステップ)
+  - [目次](#目次)
   - [パッケージのインストール](#パッケージのインストール)
   - [FastAPI を使ってみる](#fastapi-を使ってみる)
     - [スクリプトの記述](#スクリプトの記述)
@@ -8,6 +11,7 @@
     - [チェック](#チェック)
     - [対話的 API ドキュメント(Swagger UI)](#対話的-api-ドキュメントswagger-ui)
   - [(補足) def か async def か](#補足-def-か-async-def-か)
+  - [Next: Chapter2 ディレクトリ構成](#next-chapter2-ディレクトリ構成)
 
 ## パッケージのインストール
 
@@ -94,3 +98,5 @@ FastAPI では、`/docs`にアクセスすることで、自動生成された�
   - よく分からない場合。
 
 公式サイトで[async def に関する解説](https://fastapi.tiangolo.com/ja/async/)があります。
+
+## [Next: Chapter2 ディレクトリ構成](../chapters/chapter2.md)
