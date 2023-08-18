@@ -9,3 +9,4 @@ Python の実行環境については、仮想環境などを用意してくだ�
 
 - [Chapter1 FastAPI はじめのステップ](./chapters/chapter1.md)
 - [Chapter2 ディレクトリ構成](./chapters/chapter2.md)
+- [Chapter3 スキーマ](./chapters/chapter3.md)
