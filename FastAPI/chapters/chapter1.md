@@ -1,8 +1,8 @@
-# FastAPI はじめのステップ
+# Chapter1 FastAPI はじめのステップ
 
 ## 目次
 
-- [FastAPI はじめのステップ](#fastapi-はじめのステップ)
+- [Chapter1 FastAPI はじめのステップ](#chapter1-fastapi-はじめのステップ)
   - [目次](#目次)
   - [パッケージのインストール](#パッケージのインストール)
   - [FastAPI を使ってみる](#fastapi-を使ってみる)
