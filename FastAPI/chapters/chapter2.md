@@ -17,7 +17,7 @@
   - [Chapter1 のリファクタリング](#chapter1-のリファクタリング)
     - [router を使ったファイル分け](#router-を使ったファイル分け)
     - [動作確認](#動作確認)
-  - [Next: Chapter3 スキーマ](#next-chapter3-スキーマ)
+  - [Next: Chapter3 エンドポイントの作成](#next-chapter3-エンドポイントの作成)
   - [Prev: Chapter1 FastAPI はじめのステップ](#prev-chapter1-fastapi-はじめのステップ)
 
 ## ディレクトリ作成
@@ -156,6 +156,6 @@ Chapter1 と同じように[Swagger UI](http://127.0.0.1:8000/docs)を開いて�
 
 Chapter1 とほぼ同じ画面が表示されているかと思いますが、1 箇所**default**から**test**に変わったところがあると思います。これは、`app/api/api.py`で定義した`api_router.include_router`の引数の`tags=["test"]`によって設定されています。機能ごとに tags を設定するとこのようにドキュメントも整理されるので、tags は書くようにしましょう。
 
-## [Next: Chapter3 スキーマ](../chapters/chapter3.md)
+## [Next: Chapter3 エンドポイントの作成](../chapters/chapter3.md)
 
 ## [Prev: Chapter1 FastAPI はじめのステップ](../chapters/chapter1.md)

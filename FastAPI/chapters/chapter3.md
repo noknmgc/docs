@@ -324,7 +324,7 @@ from app import schemas
           if value is not None:
               update_dict[column] = value
 
-    　user_ids = [user.signin_id for user in fake_user_db]
+      user_ids = [user.signin_id for user in fake_user_db]
       if signin_id not in user_ids:
           raise HTTPException(status_code=404, detail="User not found")
 
