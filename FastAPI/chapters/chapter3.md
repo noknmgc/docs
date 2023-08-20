@@ -13,6 +13,7 @@
   - [作成するエンドポイント](#作成するエンドポイント)
   - [スキーマの定義](#スキーマの定義)
   - [パスオペレーション関数の定義](#パスオペレーション関数の定義)
+  - [Next: Chapter4 DB との連携](#next-chapter4-dbとの連携)
   - [Prev: Chapter2 ディレクトリ構成](#prev-chapter2-ディレクトリ構成)
 
 ## パラメータの取得(スキップ可)
@@ -364,5 +365,7 @@ def read_user(skip: int = 0, limit: int = 100):
 `response_model`を指定してあげると、自動的にスキーマに変換してくれます。上の関数で、`fake_user_db`は、`List[User]`という型ですが、`response_model`を定義したことにより、`List[schemas.UserResponse]`に変換されてレスポンスが返されます。
 
 [SwaggerUI](http://127.0.0.1:8000/docs)で、いろいろ試して動作を確認してみましょう。
+
+## [Next: Chapter4 DB との連携](../chapters/chapter4.md)
 
 ## [Prev: Chapter2 ディレクトリ構成](../chapters/chapter2.md)
