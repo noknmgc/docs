@@ -335,7 +335,7 @@ from app import schemas
           setattr(new_user, key, update_dict[key])
       fake_user_db[index] = new_user
 
-        return new_user
+      return new_user
   ```
 
 - `DELETE` `/users/{sinin_id}`
