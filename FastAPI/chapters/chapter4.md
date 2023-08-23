@@ -1,10 +1,10 @@
-# Chapter4 DB との連携
+# Chapter4 DBとの連携
 
 ここでは、ユーザーデータを実際に DB に置いていきます。SQLAlchemy という ORM ライブラリを使います。DB には PostgreSQL を使用します。
 
 ## 目次
 
-- [Chapter4 DB との連携](#chapter4-db-との連携)
+- [Chapter4 DBとの連携](#chapter4-dbとの連携)
   - [目次](#目次)
   - [ライブラリのインストール](#ライブラリのインストール)
   - [設定ファイルの追加](#設定ファイルの追加)
