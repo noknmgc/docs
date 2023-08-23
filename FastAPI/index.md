@@ -11,3 +11,4 @@ Python の実行環境については、仮想環境などを用意してくだ�
 - [Chapter2 ディレクトリ構成](./chapters/chapter2.md)
 - [Chapter3 エンドポイントの作成](./chapters/chapter3.md)
 - [Chapter4 DB との連携](./chapters/chapter4.md)
+- [Chapter5 セキュリティの実装](./chapters/chapter5.md)
