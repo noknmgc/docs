@@ -38,6 +38,16 @@ PostgreSQL では、`psycopg2`が必要になります。ただし、`psycopg2`�
 pip install psycopg2-binary
 ```
 
+また、DBにユーザー情報を登録するので、その際にパスワードのハッシュ化を行います。パスワードのハッシュ化には、`passlib`を使います。また、ハッシュ化には`bcrypt`も使用します。以下のコマンドでインストールしてください。
+
+```bash
+pip install passlib
+```
+
+```bash
+pip install bcrypt
+```
+
 ※DB については、各自用意してください。ここでは、PostgreSQL を利用し、`test`という名前の DB を作成しています。
 
 ## 設定ファイルの追加
@@ -343,17 +353,7 @@ user = CRUDUser(User)
 from .crud_user import user
 ```
 
-ここでは、パスワードのハッシュ化が仮の物になっているので、次はパスワードのハッシュ化を実装します。パスワードのハッシュ化には、`passlib`を使います。また、ハッシュ化には`bcrypt`も使用します。以下のコマンドでインストールしてください。
-
-```bash
-pip install passlib
-```
-
-```bash
-pip install bcrypt
-```
-
-パスワードのハッシュ化やこの後実装するJson Web Tokenの発行などは、`app/core/security.py`に記述します。パスワードのハッシュ化と同時にパスワードの検証も実装します。以下のファイルを作成してください。
+ここでは、パスワードのハッシュ化が仮の物になっているので、次はパスワードのハッシュ化を実装します。パスワードのハッシュ化やこの後実装するJson Web Tokenの発行などは、`app/core/security.py`に記述します。パスワードのハッシュ化と同時にパスワードの検証も実装します。以下のファイルを作成してください。
 
 `app/core/security.py`
 ```python
