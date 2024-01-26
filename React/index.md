@@ -5,7 +5,7 @@
 # 目次
 
 - [Chapter1 React開発環境の準備](./chapters/chapter1.md)
-- [Chapter2 Reactの基本動作]()
+- [Chapter2 Reactの基本動作](./chapters/chapter2.md)
 - [Chapter3 スタイリング]()
 - [Chapter4 状態管理 useState]()
 - [Chapter5 その他の状態管理 useReducer, useContext]()
