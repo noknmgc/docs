@@ -1,0 +1,56 @@
+<!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<script>
+// Get the button
+const mybutton = document.getElementById("btn-back-to-top");
+
+// When the user scrolls down 20px from the top of the document, show the button
+const scrollFunction = () => {
+  if (
+    document.body.scrollTop > 20 ||
+    document.documentElement.scrollTop > 20
+  ) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+};
+const backToTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+// When the user clicks on the button, scroll to the top of the document
+mybutton.addEventListener("click", backToTop);
+window.addEventListener("scroll", scrollFunction);
+</script>
+
+<style>
+#btn-back-to-top{
+  position: fixed;
+  right: 1.25rem; 
+  bottom: 1.25rem; 
+  padding: 0.75rem;
+  border-style: none; 
+  border-radius: 9999px;
+  color: #ffffff; 
+  background-color: rgb(20 184 166);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+#btn-back-to-top:hover{
+  background-color: rgb(13 148 136);
+}
+
+.arrowUpIcon{
+  width: 1.25rem;
+  height: 1rem;
+}
+</style>
+
+<!-- Setup Google Analytics -->
+{% include head-custom-google-analytics.html %}
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="{{ '/favicon.ico' | relative_url }}" -->
+
+<!-- end custom head snippets -->
