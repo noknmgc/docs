@@ -9,6 +9,8 @@
 - [Reactアプリ開発の始め方（create-react-app）](#reactアプリ開発の始め方create-react-app)
 - [コンポーネントの作成](#コンポーネントの作成)
 - [コンポーネント間の値の受け渡し（props）](#コンポーネント間の値の受け渡しprops)
+  - [propsの特殊な例（children）](#propsの特殊な例children)
+- [特殊なコンポーネントReact.Fragment](#特殊なコンポーネントreactfragment)
 
 ## Reactを動かしてみる
 以下のhtmlファイルを作成して、reactを動かしてみましょう。ここでの記述方法は、通常の開発で使うことはありませんので、覚える必要はありません。ここでは、Reactがどのような手順でhtmlに変更を加えているのかを確認してください。好きなディレクトリに以下の`index.html`を作成してください。
@@ -267,7 +269,7 @@ export default App;
 
 以下のような画面になっていれば、成功です。
 
-![](../images/ch2_hello_react.png)
+![Hello React](../images/ch2_hello_react.png)
 
 
 ## コンポーネントの作成
@@ -297,13 +299,150 @@ my-app
 
 `Hello.tsx`
 ```javascript
-const Hello = () => {
+const Hello: React.FC = () => {
     return <h1>Hello React</h1>
 }
 
 export default Hello
 ```
 
+それでは、作成したHelloコンポーネントを使って、`App.tsx`を書き換えましょう。
+
+`App.tsx`
+```javascript
+import Hello from "./components/Hello";
+
+function App() {
+  return (
+    <Hello />
+  );
+}
+
+export default App;
+```
+
+ブラウザ画面を確認してみましょう。`npm start`を終了させた人は、`npm start`を実行して、[http://localhost:3000/](http://localhost:3000/)をブラウザで開いてください。
+プログラムの記述は変わりましたが、表示されている内容は変わっていないはずです。
+
 ## コンポーネント間の値の受け渡し（props）
 Reactはコンポーネントという単位で、細かくコードを分けていくので、コンポーネント間で値を共有したい場合がよくあります。(今はまだかもしれませんが)
-コンポーネント間での値の受け渡しには、propsを使います。
+コンポーネント間での値の受け渡しには、propsを使います。このpropsは、コンポーネント関数の引数となる部分で、必ずjavascriptのオブジェクトになります。
+
+それでは、Appコンポーネントから、Helloコンポーネントにstringを渡してみましょう。
+
+まず、値を渡す側Appは、以下のように記述します。
+```javascript
+function App() {
+  return (
+    <Hello target="React"/>
+  );
+}
+```
+
+このようにすると、Helloコンポーネントに以下のようなオブジェクトが渡されます。
+```javascript
+{ target: "React" }
+```
+それでは、Helloコンポーネントでは、どのように値が渡されているか確認しましょう。
+Helloコンポーネントの中身を以下のように変更してください。
+
+```javascript
+interface HelloProps {
+  target: string;
+}
+
+const Hello: React.FC<HelloProps> = (props) => {
+  console.log(props)
+  return <h1>Hello React</h1>
+}
+```
+
+Chromeの検証ツールからコンソールの出力を確認してみましょう。
+
+それでは、propsで渡された値を使ってみましょう。javascriptの分割代入を使うことで、propsの中身を受け取ります。
+
+```javascript
+const Hello: React.FC<HelloProps> = ({ target }) => {
+  return <h1>Hello {target}</h1>;
+};
+```
+
+ここで、`<h1>`タグ内をみてください。変数`target`は、`{target}`として渡しています。単に`target`としてしまうと、文字列のtargetと認識されてしまいます。そのため、JSX記法で、HTMLタグ内やコンポーネント内で変数やオブジェクトを使う場合、`{}`をつけましょう。
+
+### propsの特殊な例（children）
+propsで渡す値の中で`children`は、渡し方が異なります。この`children`は、`<h1>Hello React</h1>`で言うと`Hello React`の部分になります。この例では、HTMLタグでしたが、コンポーネントでも同じように値を渡すことができます。
+
+また、`children`は文字列だけでなく、HTML要素やコンポーネントを渡すことができます。
+
+それでは、`Hello`コンポーネントが`children`を受け取るように改造しましょう。
+
+`Hello.tsx`
+```javascript
+interface HelloProps {
+  target: string;
+  children: React.ReactNode;
+}
+
+const Hello: React.FC<HelloProps> = ({ target, children }) => {
+  return (
+    <div>
+      <h1>Hello {target}</h1>
+      {children}
+    </div>
+  );
+};
+
+export default Hello;
+```
+
+次にHelloコンポーネントを使っている`App.tsx`も修正しましょう。
+
+`App.tsx`
+```javascript
+function App() {
+  return <Hello target="React">Hi</Hello>;
+}
+```
+
+それでは、ブラウザ画面を開いてください。`npm start`を終了させた人は、`npm start`を実行して、[http://localhost:3000/](http://localhost:3000/)をブラウザで開いてください。
+
+以下のような画面が表示されれば、成功です。
+
+![Hello React Hi](../images/ch2_children.png)
+
+この`children`には、今回のように文字列は、もちろんですが、HTML要素、コンポーネントも渡すことができます。以下のように色々変更してみてください。
+
+```javascript
+function App() {
+  return (
+    <Hello target="React">
+      <button>Hi</button>
+    </Hello>
+  );
+}
+```
+
+## 特殊なコンポーネントReact.Fragment
+Reactコンポーネントには、必ず１つの要素を返すというルールがあります。（複数の要素を変えることはできない）
+
+例えば、以下のように複数のHTML要素を変えそうとすると、エラーになることが分かります。
+```javascript
+const Hello = () => {
+  return <div>Hello</div><div>React</div>;
+}
+```
+
+ただ、状況によっては、複数の要素を返すようなコンポーネントを作りたいことがあります。その時に利用するのが`React.Fragment`です。`React.Fragment`は、以下のコードに示すように`<>...</>`という構文で表せます。
+
+```javascript
+const Hello = () => {
+  return (
+    <>
+      <div>Hello</div>
+      <div>React</div>
+    </>
+  );
+};
+```
+
+この`React.Fragment`は、React上では、一つの要素（コンポーネント）と解釈されますが、Reactが最終的に生成するHTMLでは、`React.Fragment`は消えた状態になります。
