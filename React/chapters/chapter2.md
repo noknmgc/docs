@@ -6,11 +6,12 @@
 - [Reactを動かしてみる](#reactを動かしてみる)
   - [Reactの記法（JSX）](#reactの記法jsx)
 - [Reactのコンセプト](#reactのコンセプト)
-- [Reactアプリ開発の始め方（create-react-app）](#reactアプリ開発の始め方create-react-app)
+- [Reactアプリ開発の始め方 (vite)](#reactアプリ開発の始め方-vite)
 - [コンポーネントの作成](#コンポーネントの作成)
 - [コンポーネント間の値の受け渡し（props）](#コンポーネント間の値の受け渡しprops)
   - [propsの特殊な例（children）](#propsの特殊な例children)
 - [特殊なコンポーネントReact.Fragment](#特殊なコンポーネントreactfragment)
+- [Next: Chapter３ スタイリング](#next-chapter３-スタイリング)
 
 ## Reactを動かしてみる
 以下のhtmlファイルを作成して、reactを動かしてみましょう。ここでの記述方法は、通常の開発で使うことはありませんので、覚える必要はありません。ここでは、Reactがどのような手順でhtmlに変更を加えているのかを確認してください。好きなディレクトリに以下の`index.html`を作成してください。
@@ -112,109 +113,124 @@ const Hello = () => {
 
 ※コンポーネントをクラスで記述するものもありますが、これは以前のReactの記法です。すごく特殊な場合を除いては、関数でコンポーネントを定義しましょう。
 
-## Reactアプリ開発の始め方（create-react-app）
-ここから本格的にReactのプロジェクトを作っていきましょう。reactのプロジェクトは、`react-create-app`を利用することで、簡単に始めることができます。
+## Reactアプリ開発の始め方 (vite)
+ここから本格的にReactのプロジェクトを作っていきましょう。reactのプロジェクトは、`vite`を利用することで、簡単に始めることができます。
 以下ようなコマンドで、Reactのtemplateを生成することができます。(node.jsをインストールする必要があります。)
 
 ```shell
-npx create-react-app プロジェクト名
+npm create vite@latest
 ```
 
-それでは、実際にcreate-react-appを試してみましょう。
-これ以降のコードは、typescriptを使用していきますので、templateオプションとしてtypescriptを指定します。`--template typescript`
+コマンド実行後、いくつか質問されるので、それに答えていきます。
+
+まず、project名を設定します。
+デフォルトは、`vite-project`となっています。
+```shell
+? Project name: > vite-project
+```
+
+次に、どのフレームワークを利用するか答えます。
+ここでは、`React`を選択しましょう。
+```shell
+? Select a framework: › - Use arrow-keys. Return to submit.
+❯   Vanilla
+    Vue
+    React
+    Preact
+    Lit
+    Svelte
+    Solid
+    Qwik
+    Others
+```
+
+次に、TypescriptかJavascriptを選択します。[SWR](https://swc.rs/)は、高速なコンパイラです。特に理由がなければ、`+ SWR`の方を選択してください。
+
+ここでは、Typescriptで解説をしていくので、`TypeScript + SWC`を選択してください。
+```shell
+? Select a variant: › - Use arrow-keys. Return to submit.
+❯   TypeScript
+    TypeScript + SWC
+    JavaScript
+    JavaScript + SWC
+```
+
+これで、テンプレートが作成されます。ただライブラリ等はインストールされていない状態なので、以下のコマンドでインストールをしていきます。
 
 ```shell
-npx create-react-app my-app --template typescript
+cd {プロジェクト名}
+npm install
 ```
 
-これを実行すると、`my-app`というディレクトリが作成され、その中にReactのテンプレートが作成されます。
-`my-app`のディレクトリ構成は、以下のようになっているはずです。
+インストール終了したら、プロジェクトディレクトリ配下の構成は、以下のようになっているはずです。
+
 ```
-my-app
-├── .git
-├── .gitignore
+.
 ├── README.md
-├── node_modules
-├── package-lock.json
+├── index.html
 ├── package.json
 ├── public
 ├── src
-└── tsconfig.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
 ```
 
-それでは、`my-app`ディレクトリに移動して、実行してみましょう。
-
+開発サーバを立ち上げてみましょう。開発サーバの立ち上げは、以下のコマンドです。
 ```shell
-cd my-app
-npm start
+npm run dev
 ```
+デフォルトでは、[http://localhost:5173/](http://localhost:5173/)がブラウザで開かれ、画面を見ることができます。以下のような画面が表示されれば、成功です。
 
-`npm start`を実行すると、開発サーバが立ち上がり、ブラウザで`http://localhost:3000`が開かれ、以下のような表示になります。
+![create vite default](../images/ch2_create_vite.png)
 
-![create_react_app default](../images/ch2_create_react_app.png)
+それでは、ファイルの中身を見ていきましょう。プロジェクトディレクトリ直下にある`index.html`を開いてみてください。以下のような内容になっているはずです。
 
-それでは、ファイルの中身を少しみてみましょう。`public/index.html`を開いてみてください。以下のような内容になっているはずです。（コメントは削除しています。）
-
-`public/index.html`
+`index.html`
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>React App</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
 ```
 
 これが、ベースとなるhtmlファイルです。`body`タグにある`<div id="root"></div>`の中は、Reactで構成していく部分になります。
-`head`タグ内は、必要に応じて変更してください。
 
-次に`src`ディレクトリの中身を見てみましょう。ここには、ソースコードが格納されています。通常、typescriptのソースコードの拡張子は、`.ts`ですが、Reactでは、上で紹介したJSXという記法を使うため、コンポーネントを記述する場合は、拡張子も変わり、`.tsx`となります。(javascriptの場合は、`.jsx`)
+`head`タグ内は、必要に応じて変更してください。特に`<html lang="en">`の部分は、開発している画面の言語に合うように設定を変えてください。日本語の場合は、`<html lang="ja">`です。
+また、アイコンなどもviteのものになっているので、変更するようにしてください。
 
+次にsrcディレクトリの中を見てみましょう。ここには、ソースコードが格納されています。通常、typescriptのソースコードの拡張子は、`.ts`ですが、Reactでは、上で紹介したJSXという記法を使うため、コンポーネントを記述する場合は、拡張子も変わり、`.tsx`となります。(javascriptの場合は、`.jsx`)
 
-`src/index.tsx`を開いてみてください。
+`src/main.tsx`を開いてみてください。
 
-`src/index.tsx`
+`src/main.tsx`
 ```javascript
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  </React.StrictMode>,
+)
 ```
 
 ここの内容は、HTMLに直接記述したものと同じような内容であることが分かると思います。
-このスクリプトによって、`public/index.html`の`<div id="root"></div>`の中に、`root.render`の引数が挿入されます。
+このスクリプトによって、`index.html`の`<div id="root"></div>`の中に、`root.render`の引数が挿入されます。
 `root.render`の引数である`React.StrictMode`, `App`は、コンポーネントになります。`React.StrictMode`は、開発時にバグを見つけやすくするようにするもので、画面は何も変わりませんが、プログラムの挙動が変わります。
 
-`React.StrictMode`によって以下のような挙動が追加されます。（参考：[<StrictMode> - React](https://ja.react.dev/reference/react/StrictMode)）
+`React.StrictMode`によって以下のような挙動が追加されます。（参考：[StrictMode - React](https://ja.react.dev/reference/react/StrictMode)）
 - レンダー（画面描画）を追加で1回行う。
 - エフェクト(useEffectで指定した内容)の実行を追加で1回行う。
 - 非推奨のAPIを使用していないかチェックする。
@@ -223,36 +239,46 @@ reportWebVitals();
 
 `src/App.tsx`
 ```javascript
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
-      </header>
-    </div>
-  );
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
-export default App;
+export default App
 ```
 
-ここには、実際にブラウザの画面上に表示されているものが定義されていることが分かると思います。
-それでは、この`App.tsx`を書き換えてみましょう。
+ここには、実際にブラウザの画面上に表示されているものが定義されていることが分かると思います。後の章で説明しますが、`useState`を使った状態管理も行なっています。
+
+それでは、この`App.tsx`をもっと単純なものに書き換えてみましょう。
 
 ```javascript
 function App() {
@@ -265,12 +291,11 @@ export default App;
 ```
 
 これで、HTMLに直接記述したときと同じ内容になっているはずです。ブラウザ画面を見てみてください。
-`npm start`を終了させた人は、`npm start`を実行して、[http://localhost:3000/](http://localhost:3000/)をブラウザで開いてください。
+`npm run dev`を終了させた人は、`npm run dev`を実行して、[http://localhost:5173/](http://localhost:5173/)をブラウザで開いてください。
 
 以下のような画面になっていれば、成功です。
 
-![Hello React](../images/ch2_hello_react.png)
-
+![Hello React](../images/ch2_hello_react_vite.png)
 
 ## コンポーネントの作成
 
@@ -291,7 +316,7 @@ export default App;
 `Hello`コンポーネントを作成するので、`Hello.tsx`というファイル名になります。
 
 ```
-my-app
+.
 └── src
     └──components
         └── Hello.tsx
@@ -321,7 +346,7 @@ function App() {
 export default App;
 ```
 
-ブラウザ画面を確認してみましょう。`npm start`を終了させた人は、`npm start`を実行して、[http://localhost:3000/](http://localhost:3000/)をブラウザで開いてください。
+ブラウザ画面を確認してみましょう。`npm run dev`を終了させた人は、`npm run dev`を実行して、[http://localhost:5173/](http://localhost:5173/)をブラウザで開いてください。
 プログラムの記述は変わりましたが、表示されている内容は変わっていないはずです。
 
 ## コンポーネント間の値の受け渡し（props）
@@ -404,11 +429,11 @@ function App() {
 }
 ```
 
-それでは、ブラウザ画面を開いてください。`npm start`を終了させた人は、`npm start`を実行して、[http://localhost:3000/](http://localhost:3000/)をブラウザで開いてください。
+それでは、ブラウザ画面を開いてください。`npm run dev`を終了させた人は、`npm run dev`を実行して、[http://localhost:5173/](http://localhost:5173/)をブラウザで開いてください。
 
 以下のような画面が表示されれば、成功です。
 
-![Hello React Hi](../images/ch2_children.png)
+![Hello React Hi](../images/ch2_children_vite.png)
 
 この`children`には、今回のように文字列は、もちろんですが、HTML要素、コンポーネントも渡すことができます。以下のように色々変更してみてください。
 
@@ -446,3 +471,5 @@ const Hello = () => {
 ```
 
 この`React.Fragment`は、React上では、一つの要素（コンポーネント）と解釈されますが、Reactが最終的に生成するHTMLでは、`React.Fragment`は消えた状態になります。
+
+## [Next: Chapter３ スタイリング](../chapters/chapter3.md)

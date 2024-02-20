@@ -7,6 +7,7 @@
   - [node.js](#nodejs)
   - [Visual Studio Code　(エディタ)](#visual-studio-codeエディタ)
     - [VSCodeの拡張機能](#vscodeの拡張機能)
+- [Next: Chapter2 Reactの基本動作](#next-chapter2-reactの基本動作)
 
 
 ## ソフトウェアのインストール
@@ -46,3 +47,5 @@ https://code.visualstudio.com/
   `dsznajder.es7-react-js-snippets`
 
   Reactのスニペット(ショートカット)を使えるようにする
+
+## [Next: Chapter2 Reactの基本動作](../chapters/chapter2.md)
