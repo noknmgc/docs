@@ -272,7 +272,9 @@ const StyledButton: React.FC = () => {
 export default StyledButton;
 ```
 
-cssの書き方は、変わらないので、すでにcssを使い慣れている人におすすめの方法です。
+`npm run dev`を実行し、開発サーバーで実行結果を確認すると、同じボタンが3つ並ぶことが確認できます。
+
+以上が、CSS Modulesの使い方です。cssの書き方は、変わらないので、すでにcssを使い慣れている人におすすめの方法です。
 
 ### CSS Modulesの注意点
 
@@ -295,7 +297,173 @@ CSS-in-JSのメリット
 - 動的なスタイルが作りやすい。
 - スタイルの適用対象がわかりやすい。
 
-CSS-in-JSのライブラリは、複数ありますが、ここでは、最も利用されているStyled Componentsを取り扱います。
+CSS-in-JSのライブラリは、複数ありますが、ここでは、最も利用されているstyled-componentsを取り扱います。
+
+それでは、styled-componentsをインストールしましょう。
+プロジェクトのディレクトリに移動して、npmでインストールします。
+```shell
+cd vite-project
+npm install styled-components
+```
+
+styled-componentsでは、以下の公式サイトのサンプルのように、HTML要素にスタイルをつけたものをコンポーネントとして定義することができるようになります。
+```javascript
+import styled from "styled-components";
+
+// Create a Title component that'll render an <h1> tag with some styles
+const Title = styled.h1`
+  font-size: 1.5em;
+  text-align: center;
+  color: #BF4F74;
+`;
+
+// Create a Wrapper component that'll render a <section> tag with some styles
+const Wrapper = styled.section`
+  padding: 4em;
+  background: papayawhip;
+`;
+
+// Use Title and Wrapper like any other React component – except they're styled!
+render(
+  <Wrapper>
+    <Title>
+      Hello World!
+    </Title>
+  </Wrapper>
+);
+```
+
+また、styled-compoentnsは、コンポーネントなので、以下のようにpropsを渡すこともでき、動的なスタイルも定義できます。
+```javascript
+import styled from "styled-components";
+
+const Button = styled.button<{ $primary?: boolean; }>`
+  /* Adapt the colors based on primary prop */
+  background: ${props => props.$primary ? "#BF4F74" : "white"};
+  color: ${props => props.$primary ? "white" : "#BF4F74"};
+
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid #BF4F74;
+  border-radius: 3px;
+`;
+
+render(
+  <div>
+    <Button>Normal</Button>
+    <Button $primary>Primary</Button>
+  </div>
+);
+```
+
+それでは、ここからstyled-componentsを実際に使っていくのですが、
+styled-componentsは、javascriptにcssを記述するため、デフォルトだと予測変換やシンタックスハイライトが効かないので、拡張機能を入れると便利です。
+
+まず、vscodeの拡張機能[vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components)をインストールしましょう。
+
+それでは、[Raw CSS](#raw-css)で定義したものと全く同じスタイルのボタンをstyled-componentsで作ってみましょう。
+
+`StyledButton.tsx`に以下の記述を追加してください。
+
+```javascript
+import styled from "styled-components";
+
+const CustomButton = styled.button`
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #1d4ed8;
+  border-style: none;
+
+  &:hover {
+    background-color: #1e40af;
+  }
+
+  &:focus {
+    outline-style: solid;
+    outline-width: 4px;
+    outline-color: #93c5fd;
+  }
+`;
+```
+
+ここで、定義した`CustomButton`を`StyledButton`コンポーネントに追加しましょう。
+
+```javascript
+const StyledButton: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+        gap: "1rem",
+      }}
+    >
+      <button className="custom-button">Push</button>
+      <button
+        style={{
+          paddingTop: "0.625rem",
+          paddingBottom: "0.635rem",
+          paddingLeft: "1.25rem",
+          paddingRight: "1.25rem",
+          marginBottom: "0.5rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.875rem",
+          lineHeight: "1.25rem",
+          fontWeight: 500,
+          color: "#ffffff",
+          backgroundColor: "#1d4ed8",
+          borderStyle: "none",
+        }}
+      >
+        Push
+      </button>
+      <button className={styles["custom-button"]}>Push</button>
+      <CustomButton>Push</CustomButton>
+    </div>
+  );
+};
+```
+
+`npm run dev`を実行し、開発サーバーで実行結果を確認すると、同じボタンが4つ並ぶことが確認できます。
+
+以上が、styled-componentsの使い方です。CSS in JSは、styled-componentsの他にも[Emotion](https://emotion.sh/docs/introduction)や[Linaria](https://linaria.dev/)などがあります。
+
+emotionは、styled-componentsを拡張したもので、styled-componentsと同じ記法も使えますが、以下のようにcssとcssというpropsに渡すことでもスタイルを定義することができます。
+```javascript
+import { css } from '@emotion/react'
+
+const color = 'white'
+
+render(
+  <div
+    css={css`
+      padding: 32px;
+      background-color: hotpink;
+      font-size: 24px;
+      border-radius: 4px;
+      &:hover {
+        color: ${color};
+      }
+    `}
+  >
+    Hover to change color.
+  </div>
+)
+```
+また、Emotionは、[Material UI](https://mui.com/)でも使うことができるので、Material UIの利用を考えている場合は、Emotionを利用するのが良さそうです。
+
+
+styled-componentsに拘らず、自分のニーズに合ったライブラリを利用しましょう。
+
 
 ## Tailwind
 
@@ -305,6 +473,27 @@ Tailwindのメリット
 - クラス名からスタイルが分かる。
 
 まず、Tailwindのインストール手順です。
+公式サイトの案内は、[こちら](https://tailwindcss.com/docs/guides/vite)にあります。
+
+まず、viteで作成したプロジェクトのディレクトリに移動します。
+```shell
+cd vite-project
+```
+
+次に、tailwindとその関連ライブラリをインストールします。
+```shell
+npm install -D tailwindcss postcss autoprefixer
+```
+
+次に、Tailwindの初期化処理を行います。
+```shell
+npx tailwindcss init -p
+```
+
+上記コマンド実行後、`tailwind.config.js`というファイルが作成されるので、Tailwindを使うファイルを以下のように指定します。
+```javascript
+
+```
 
 ## まとめ
 全体に適用するスタイルは、cssで記述しましょう。各コンポーネントで適用するスタイルは、CSS Modules, CSS in JS, Tailwindの中から自分に合ったものを選びましょう。
