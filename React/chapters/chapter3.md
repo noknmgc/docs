@@ -10,6 +10,7 @@
   - [CSS Modulesの注意点](#css-modulesの注意点)
 - [CSS in JS](#css-in-js)
 - [Tailwind](#tailwind)
+- [まとめ](#まとめ)
 
 ## スタイリングを行うコンポーネントの追加
 スタイリングの対象となるボタンコンポーネントを作りましょう。
@@ -131,14 +132,147 @@ export default StyledButton;
 ## style props
 ReactでHTML要素を使う場合に、style propsを渡すことができます。このやり方だと、HTML要素に直接スタイルを記述するので、名前の衝突がありません。また、javascriptの変数も使うことができるので、動的なスタイルも適用できます。
 
-ただし、style propsはパフォーマンスが悪いため、あまり多用しない方が良いでしょう。名前の衝突の回避や動的なスタイルの適用は、後に紹介する方法でもできます。
+style propsは以下のように適用します。`StyledButton.tsx`にボタンを追加し、cssで記述したスタイルをそのままstyle propsに記述していきます。コンポーネントを以下のように修正しましょう。
+
+また、今後ボタンが複数並ぶので、みやすいようにgridも作成しています。
+
+```javascript
+const StyledButton: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+        gap: "1rem",
+      }}
+    >
+      <button className="custom-button">Push</button>
+      <button
+        style={{
+          paddingTop: "0.625rem",
+          paddingBottom: "0.635rem",
+          paddingLeft: "1.25rem",
+          paddingRight: "1.25rem",
+          marginBottom: "0.5rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.875rem",
+          lineHeight: "1.25rem",
+          fontWeight: 500,
+          color: "#ffffff",
+          backgroundColor: "#1d4ed8",
+          borderStyle: "none",
+        }}
+      >
+        Push
+      </button>
+    </div>
+  );
+};
+```
+
+こうすることで、同じようなボタンが2つ並びます。
+
+![styled button by style props](../images/ch3_css_styled_button2.png)
+
+ただし、style propsでは、hoverとfocusは、後で紹介する状態管理を使って行う必要があるので、ここでは適用していません。
+
+style propsはパフォーマンスが悪いため、あまり多用しない方が良いでしょう。名前の衝突の回避や動的なスタイルの適用は、後に紹介する方法でもできます。
 
 ## CSS Moldules
 cssをそのまま使った場合にあった問題：名前の衝突を回避するために使われるのが、css modulesです。
 
-cssファイルを使いつつ、読み込んだコンポーネントにのみスタイルを適用することができます。
+css modulesでは、cssは通常通り記述するのですが、最終的に適用されるクラス名が自動生成されたものになるので、名前の衝突が回避できるようになります。
 
-すでにcssを使い慣れている人におすすめの方法です。
+[Raw CSS](#raw-css)で作成したcssファイルと中身が同じものを用意します。
+ファイル名は、`custom-button.module.css`としてください。cssの前に`module`と入れることで、CSS Modulesとして認識してくれます。
+
+以下のファイルを作成してください。
+
+`src/components/custom-button.module.css`
+```css
+.custom-button {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #1d4ed8;
+  border-style: none;
+}
+
+.custom-button:hover {
+  background-color: #1e40af;
+}
+
+.custom-button:focus {
+  outline-style: solid;
+  outline-width: 4px;
+  outline-color: #93c5fd;
+}
+```
+
+それでは、作成したファイルを読み込んでいきましょう。
+CSS Modulesでは、以下のようにimportして使います。
+```javascript
+import styles from "./custom-button.module.css"
+```
+このimportした`styles`を見てみると
+```json
+{"custom-button":"_custom-button_1317u_1"}
+```
+となっており、`"_custom-button_1317u_1"`は、自動生成されたクラス名です。したがって、`styles["custom-button"]`を`className`に指定しましょう。
+```javascript
+<button className={styles["custom-button"]}>Push</button>
+```
+
+`StyledButton.tsx`を以下のように修正しましょう。
+
+```javascript
+import "./custom-button.css";
+import styles from "./custom-button.module.css";
+
+const StyledButton: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+        gap: "1rem",
+      }}
+    >
+      <button className="custom-button">Push</button>
+      <button
+        style={{
+          paddingTop: "0.625rem",
+          paddingBottom: "0.635rem",
+          paddingLeft: "1.25rem",
+          paddingRight: "1.25rem",
+          marginBottom: "0.5rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.875rem",
+          lineHeight: "1.25rem",
+          fontWeight: 500,
+          color: "#ffffff",
+          backgroundColor: "#1d4ed8",
+          borderStyle: "none",
+        }}
+      >
+        Push
+      </button>
+      <button className={styles["custom-button"]}>Push</button>
+    </div>
+  );
+};
+
+export default StyledButton;
+```
+
+cssの書き方は、変わらないので、すでにcssを使い慣れている人におすすめの方法です。
 
 ### CSS Modulesの注意点
 
@@ -171,3 +305,8 @@ Tailwindのメリット
 - クラス名からスタイルが分かる。
 
 まず、Tailwindのインストール手順です。
+
+## まとめ
+全体に適用するスタイルは、cssで記述しましょう。各コンポーネントで適用するスタイルは、CSS Modules, CSS in JS, Tailwindの中から自分に合ったものを選びましょう。
+
+本資料では、Tailwind CSSを使っていきます。
