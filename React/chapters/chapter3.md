@@ -9,7 +9,16 @@
 - [CSS Moldules](#css-moldules)
   - [CSS Modulesの注意点](#css-modulesの注意点)
 - [CSS in JS](#css-in-js)
+  - [styled-componentsについて](#styled-componentsについて)
+  - [styled-componentsのインストール](#styled-componentsのインストール)
+  - [styled-componentsの利用](#styled-componentsの利用)
 - [Tailwind](#tailwind)
+  - [Tailwindについて](#tailwindについて)
+  - [Tailwindのインストール](#tailwindのインストール)
+  - [VSCodeの拡張機能のインストール](#vscodeの拡張機能のインストール)
+  - [Tailwindの利用](#tailwindの利用)
+  - [Tailwindの自動並び替え（スキップ可）](#tailwindの自動並び替えスキップ可)
+  - [Tailwindの注意点（動的なスタイル）](#tailwindの注意点動的なスタイル)
 - [まとめ](#まとめ)
 
 ## スタイリングを行うコンポーネントの追加
@@ -45,19 +54,11 @@ function App() {
 export default App;
 ```
 
-また、viteでプロジェクトのテンプレートを作成した場合、デフォルトのスタイルを`main.tsx`で読み込んでいるので、`main.tsx`でcssを読み込んでいる行をコメントアウトまたは、削除しましょう。
+また、viteでプロジェクトのテンプレートを作成した場合、デフォルトのスタイル`index.css`を`main.tsx`で読み込んでいるので、`index.css`の中身は、空にしておきましょう。
 
-```javascript
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-//import './index.css'
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+`src/index.css`
+```css
+/* empty */
 ```
 
 `npm run dev`を実行し、[http://localhost:5173/](http://localhost:5173/)をブラウザで開いてください。
@@ -101,6 +102,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 また、定義したcssも読み込む必要がありますので、cssファイルをimportしましょう。
 
 `StyledButton.tsx`を以下のように修正しましょう。
+
 `src/components/StyledButton.tsx`
 ```javascript
 import "./custom-button.css";
@@ -232,6 +234,7 @@ import styles from "./custom-button.module.css"
 
 `StyledButton.tsx`を以下のように修正しましょう。
 
+`src/components/StyledButton.tsx`
 ```javascript
 import "./custom-button.css";
 import styles from "./custom-button.module.css";
@@ -299,13 +302,7 @@ CSS-in-JSのメリット
 
 CSS-in-JSのライブラリは、複数ありますが、ここでは、最も利用されているstyled-componentsを取り扱います。
 
-それでは、styled-componentsをインストールしましょう。
-プロジェクトのディレクトリに移動して、npmでインストールします。
-```shell
-cd vite-project
-npm install styled-components
-```
-
+### styled-componentsについて
 styled-componentsでは、以下の公式サイトのサンプルのように、HTML要素にスタイルをつけたものをコンポーネントとして定義することができるようになります。
 ```javascript
 import styled from "styled-components";
@@ -357,7 +354,16 @@ render(
 );
 ```
 
-それでは、ここからstyled-componentsを実際に使っていくのですが、
+### styled-componentsのインストール
+それでは、styled-componentsをインストールしましょう。
+プロジェクトのディレクトリに移動して、npmでインストールします。
+```shell
+cd vite-project
+npm install styled-components
+```
+
+### styled-componentsの利用
+ここからstyled-componentsを実際に使っていくのですが、
 styled-componentsは、javascriptにcssを記述するため、デフォルトだと予測変換やシンタックスハイライトが効かないので、拡張機能を入れると便利です。
 
 まず、vscodeの拡張機能[vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components)をインストールしましょう。
@@ -472,6 +478,33 @@ Tailwindのメリット
 - クラス名を考える必要がない。
 - クラス名からスタイルが分かる。
 
+### Tailwindについて
+tailwindは、cssだと`display: flex;`を適用させたい場合は、クラス名に`flex`を指定していきます。
+
+例えば、cssだと以下のような指定がしたい場合、
+```css
+{
+  display: flex; 
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem; 
+  padding-left: 1rem;
+  padding-right: 1rem; 
+  align-items: center; 
+  color: #ffffff; 
+  background-color: #3B82F6;
+}
+
+:hover {
+  background-color: #60A5FA; 
+}
+```
+
+tailwindを利用すると以下をclassNameに指定することになります。
+```javascript
+className="flex items-center px-4 py-3 text-white bg-blue-500 hover:bg-blue-400"
+```
+
+### Tailwindのインストール
 まず、Tailwindのインストール手順です。
 公式サイトの案内は、[こちら](https://tailwindcss.com/docs/guides/vite)にあります。
 
@@ -492,8 +525,220 @@ npx tailwindcss init -p
 
 上記コマンド実行後、`tailwind.config.js`というファイルが作成されるので、Tailwindを使うファイルを以下のように指定します。
 ```javascript
-
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
 ```
+
+次に`src/index.css`の先頭に以下の内容を追加します。
+
+`src/index.css`
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+以上で、Tailwindが使えるようになります。
+
+※Tailwindを利用する場合、デフォルトで設定されるスタイルは、すべてクリアされ、適用されません。
+
+### VSCodeの拡張機能のインストール
+Tailwindは、独自の構文を使っているので、予測変換が効くようにVSCodeの以下の拡張機能をインストールしましょう。
+
+[Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+
+デフォルトの設定だと補完が遅いので、VSCodeの設定を変更します。`setting.json`に以下を追加してください。
+
+`setting.json`
+```json
+"editor.quickSuggestions": {
+  "strings": true
+}
+```
+
+### Tailwindの利用
+それでは、ここから実際にTailwindを利用していきましょう。
+
+まず、デフォルトのスタイルが適用されなくなるので、見やすさのために、`App.tsx`を以下のように修正してください。
+
+`src/App.tsx`
+```javascript
+import StyledButton from "./components/StyledButton";
+
+function App() {
+  return (
+    <div className="m-2">
+      <StyledButton />
+    </div>
+  );
+}
+
+export default App;
+```
+
+それでは、Tailwindでこれまでと同じボタンを作っていきましょう。
+Tailwindを使うと以下のようになります。
+```javascript
+<button className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+  Push
+</button>
+```
+
+このボタンを`StyledButton.tsx`に追加します。
+
+`src/components/StyledButton.tsx`
+```javascript
+import "./custom-button.css";
+import styles from "./custom-button.module.css";
+import styled from "styled-components";
+
+const CustomButton = styled.button`
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #1d4ed8;
+  border-style: none;
+
+  &:hover {
+    background-color: #1e40af;
+  }
+
+  &:focus {
+    outline-style: solid;
+    outline-width: 4px;
+    outline-color: #93c5fd;
+  }
+`;
+
+const StyledButton: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+        gap: "1rem",
+      }}
+    >
+      <button className="custom-button">Push</button>
+      <button
+        style={{
+          paddingTop: "0.625rem",
+          paddingBottom: "0.635rem",
+          paddingLeft: "1.25rem",
+          paddingRight: "1.25rem",
+          marginBottom: "0.5rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.875rem",
+          lineHeight: "1.25rem",
+          fontWeight: 500,
+          color: "#ffffff",
+          backgroundColor: "#1d4ed8",
+          borderStyle: "none",
+        }}
+      >
+        Push
+      </button>
+      <button className={styles["custom-button"]}>Push</button>
+      <CustomButton>Push</CustomButton>
+      <button className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+        Push
+      </button>
+    </div>
+  );
+};
+
+export default StyledButton;
+```
+
+`npm run dev`を実行してブラウザで確認してみましょう。
+
+![styled button by style props](../images/ch3_css_styled_button_last.png)
+
+### Tailwindの自動並び替え（スキップ可）
+Tailwindは、classNameにずらっとユーティリティクラスが並ぶ形になります。その際にユーティリティクラスの並び順がバラバラだと見づらくなってしまいます。
+
+そこで、Tailwind公式がprettierのプラグインとしてTailwindのユーティリティクラスを並び替えしてくれる機能を開発しているので、Tailwindを使う場合は、これを導入しましょう。
+
+公式の案内は、[こちら](https://tailwindcss.com/blog/automatic-class-sorting-with-prettier)です。
+
+まず、以下のコマンドでprettierとprettierのプラグインを入れます。
+
+```shell
+npm install -D prettier prettier-plugin-tailwindcss
+```
+
+次に、prettierがプラグインを認識してくれるように、プロジェクトディレクトリに以下の内容の`.prettierrc`というファイルを作成してください。
+
+`.prettierrc`
+```json
+{
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
+```
+
+### Tailwindの注意点（動的なスタイル）
+
+Tailwindで動的なスタイルを定義しようとした時に、うまくスタイルが反映されない場合があります。うまくいかない例とうまくいく例をみていきましょう。
+
+<!-- omit in toc -->
+#### うまくいかない例
+`App.tsx`を以下のようにしてみましょう。
+
+`src/App.tsx`
+```javascript
+import StyledButton from "./components/StyledButton";
+
+function App() {
+  let marginSize = 4;
+  return (
+    <div className={`m-${marginSize}`}>
+      <StyledButton />
+    </div>
+  );
+}
+
+export default App;
+```
+
+これで、`npm run dev`でブラウザで実行結果を確認するとmarginが適用されていないはずです。
+
+<!-- omit in toc -->
+#### うまくいく例
+今度は、`App.tsx`を少し変えて、以下のようにします。
+
+`src/App.tsx`
+```javascript
+import StyledButton from "./components/StyledButton";
+
+function App() {
+  let marginSize = "big";
+  return (
+    <div className={`${marginSize === "big" ? "m-4" : "m-2"}`}>
+      <StyledButton />
+    </div>
+  );
+}
+
+export default App;
+```
+
+この違いが起こる理由は、tailwindのユーティリティクラスは、ソースコードを静的に解析を行い、そこで使用されているユーティリティクラスを検知し、実際のcssに反映させる仕組みになっています。
+
+そのため、`m-${marginSize}`と記述するとTailwindのユーティリティクラスと一致しないため、実際のcssには反映されず、スタイルが適用されないのです。
+
 
 ## まとめ
 全体に適用するスタイルは、cssで記述しましょう。各コンポーネントで適用するスタイルは、CSS Modules, CSS in JS, Tailwindの中から自分に合ったものを選びましょう。
