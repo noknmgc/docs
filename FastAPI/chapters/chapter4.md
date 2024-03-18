@@ -1,26 +1,26 @@
-<!-- omit in toc -->
 # Chapter4 DBとの連携
 
 ここでは、ユーザーデータを実際に DB に置いていきます。SQLAlchemy という ORM ライブラリを使います。DB には PostgreSQL を使用します。
 
-<!-- omit in toc -->
 ## 目次
 
-- [ライブラリのインストール](#ライブラリのインストール)
-- [設定ファイルの追加](#設定ファイルの追加)
-- [DB 接続クラス](#db-接続クラス)
-- [DB モデルの定義](#db-モデルの定義)
-- [DB マイグレーション](#db-マイグレーション)
-- [CRUDsの実装](#crudsの実装)
-- [テスト用ユーザーデータの登録（スキップ可）](#テスト用ユーザーデータの登録スキップ可)
-- [usersエンドポイントの実装](#usersエンドポイントの実装)
-  - [POST /users](#post-users)
-  - [GET /users](#get-users)
-  - [PUT /users/{signin\_id}](#put-userssignin_id)
-  - [DELETE /users/{signin\_id}](#delete-userssignin_id)
-  - [テスト](#テスト)
-- [Next: Chapter5 セキュリティの実装](#next-chapter5-セキュリティの実装)
-- [Prev: Chapter3 エンドポイントの作成](#prev-chapter3-エンドポイントの作成)
+- [Chapter4 DBとの連携](#chapter4-dbとの連携)
+  - [目次](#目次)
+  - [ライブラリのインストール](#ライブラリのインストール)
+  - [設定ファイルの追加](#設定ファイルの追加)
+  - [DB 接続クラス](#db-接続クラス)
+  - [DB モデルの定義](#db-モデルの定義)
+  - [DB マイグレーション](#db-マイグレーション)
+  - [CRUDsの実装](#crudsの実装)
+  - [テスト用ユーザーデータの登録（スキップ可）](#テスト用ユーザーデータの登録スキップ可)
+  - [usersエンドポイントの実装](#usersエンドポイントの実装)
+    - [POST /users](#post-users)
+    - [GET /users](#get-users)
+    - [PUT /users/{signin\_id}](#put-userssignin_id)
+    - [DELETE /users/{signin\_id}](#delete-userssignin_id)
+    - [テスト](#テスト)
+  - [Next: Chapter5 セキュリティの実装](#next-chapter5-セキュリティの実装)
+  - [Prev: Chapter3 エンドポイントの作成](#prev-chapter3-エンドポイントの作成)
 
 ## ライブラリのインストール
 
