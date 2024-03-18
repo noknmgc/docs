@@ -11,6 +11,7 @@
   - [typeによる違い](#typeによる違い)
 - [useStateの注意点](#usestateの注意点)
 - [Formの作成](#formの作成)
+  - [解答例](#解答例)
 
 
 ## 準備
@@ -392,5 +393,282 @@ export default App;
 ※javascriptの関数で、特に何も処理せずに値を返す場合、`()=>"a"`のように`{}`, `return`を省略して書くこともできます。ただし、オブジェクトを返す場合は、`{}`が関数のものだと判断されてしまうので、`()=>({ value: 2 })`のように書きます。`setData`に指定している関数では、この記法を用いています。どちらを使うかは、好みやチーム内のコード規約に則って決めてください。
 
 ## Formの作成
+最後に、`useState`を使った演習問題です。
 
-最後に、`useState`をつかってフォームの状態をjavascriptの変数として扱えるようにしましょう。
+まず、ベースとなる`MyForm`コンポーネントを作ります。ここは、コピー＆ペーストでOKです。
+また、見やすさのために、`LabeledInput`, `LabeledSelectInput`コンポーネントを作ります。
+
+`src/components/LabeledInput.tsx`
+```javascript
+interface LabeledInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+}
+
+const LabeledInput: React.FC<LabeledInputProps> = ({ label, ...props }) => {
+  return (
+    <div>
+      <label className="mb-2 text-sm font-medium text-gray-900">{label}</label>
+      <input
+        className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+        {...props}
+      />
+    </div>
+  );
+};
+
+export default LabeledInput;
+
+```
+
+`src/components/LabeledSelectInput.tsx`
+```javascript
+interface LabeledSelectInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  type: "checkbox" | "radio";
+}
+
+const LabeledSelectInput: React.FC<LabeledSelectInputProps> = ({
+  label,
+  ...props
+}) => {
+  return (
+    <div className="flex items-center">
+      <input
+        className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-blue-500"
+        {...props}
+      />
+      <label className="ms-2 text-sm font-medium text-gray-900">{label}</label>
+    </div>
+  );
+};
+
+export default LabeledSelectInput;
+```
+
+そしてこの２つのコンポーネントを使った`MyForm`コンポーネントは、以下の通りです。
+
+`src/components/MyForm.tsx`
+```javascript
+import LabeledInput from "./LabeledInput";
+import LabeledSelectInput from "./LabeledSelectInput";
+
+const MyForm: React.FC = () => {
+  /**
+   * text inputのonChangeイベント
+   */
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {};
+
+  /**
+   * formのonSubmitイベント
+   */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // submitはデフォルトで再読み込みするようになっているので、
+    // それを行わないようにする。
+    e.preventDefault();
+
+    // 以下にformに入力した内容を入れる
+    console.log("Text:");
+    console.log("Number:");
+    console.log("Date:");
+    console.log("Checkbox(複数選択可):");
+    console.log("Radio(複数選択不可):");
+  };
+  return (
+    <form className="mx-auto w-1/2 space-y-2" onSubmit={handleSubmit}>
+      <LabeledInput label="Text" type="text" onChange={handleTextChange} />
+      <LabeledInput
+        label="Number"
+        type="number"
+        onChange={handleNumberChange}
+      />
+      <LabeledInput label="Date" type="date" onChange={handleDateChange} />
+      <div className="grid grid-cols-4 gap-4">
+        {["A", "B", "C"].map((value) => (
+          <LabeledSelectInput
+            key={value}
+            type="checkbox"
+            label={value}
+            value={value}
+            onChange={handleCheckboxChange}
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-4 gap-4">
+        {["a", "b", "c"].map((value) => (
+          <LabeledSelectInput
+            key={value}
+            type="radio"
+            label={value}
+            value={value}
+            onChange={handleRadioChange}
+          />
+        ))}
+      </div>
+      <button
+        type="submit"
+        className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export default MyForm;
+```
+
+ここから、`MyForm`コンポーネント内で`useState`を利用して、`handleSubmit`関数でフォームの入力内容をコンソールに表示するようにしてみましょう。
+なおラジオボタンは複数選択不可になるようにjavascriptで制御してみましょう。
+
+**注意点**
+- `LabeledInput`と`LabeledSelectInput`コンポーネントは、input要素と同じpropsを受け取るように設定してあるので、`label`props以外は、input要素と同じように動作します。
+- input要素の`type="checkbox"`と`type="radio"`は、`value`ではなく、`checked`にブール値を入れることで値を制御します。
+- `handleXXXChange`という関数を準備していますが、関数の引数など自由に変えても良いです。
+
+### 解答例
+以下に解答例を示します。他の実装方法もたくさんあります。チームのコード規約にあった実装にしましょう。
+
+`src/components/MyForm.tsx`
+```javascript
+import { useState } from "react";
+import LabeledInput from "./LabeledInput";
+import LabeledSelectInput from "./LabeledSelectInput";
+
+const MyForm: React.FC = () => {
+  const [text, setText] = useState("");
+  const [num, setNum] = useState("");
+  const [date, setDate] = useState("");
+  const [checkSelection, setCheckSelection] = useState<string[]>([]);
+  const [radioSelection, setRadioSelection] = useState("");
+  /**
+   * text inputのonChangeイベント
+   */
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  };
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNum(e.target.value);
+  };
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
+  };
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckSelection((prev) => {
+      if (prev.includes(e.target.value))
+        return prev.filter((v) => v !== e.target.value);
+      else return [...prev, e.target.value];
+    });
+  };
+
+  /**
+   * number inputのonChangeイベント
+   */
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRadioSelection(e.target.value);
+  };
+
+  /**
+   * formのonSubmitイベント
+   */
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // submitはデフォルトで再読み込みするようになっているので、
+    // それを行わないようにする。
+    e.preventDefault();
+
+    // 以下にformに入力した内容を入れる
+    console.log("Text:", text);
+    console.log("Number:", num);
+    console.log("Date:", date);
+    console.log("Checkbox(複数選択可):", checkSelection);
+    console.log("Radio(複数選択不可):", radioSelection);
+  };
+  return (
+    <form className="mx-auto w-1/2 space-y-2" onSubmit={handleSubmit}>
+      <LabeledInput
+        label="Text"
+        type="text"
+        value={text}
+        onChange={handleTextChange}
+      />
+      <LabeledInput
+        label="Number"
+        type="number"
+        value={num}
+        onChange={handleNumberChange}
+      />
+      <LabeledInput
+        label="Date"
+        type="date"
+        value={date}
+        onChange={handleDateChange}
+      />
+      <div className="grid grid-cols-4 gap-4">
+        {["A", "B", "C"].map((value) => (
+          <LabeledSelectInput
+            key={value}
+            type="checkbox"
+            label={value}
+            value={value}
+            checked={checkSelection.includes(value)}
+            onChange={handleCheckboxChange}
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-4 gap-4">
+        {["a", "b", "c"].map((value) => (
+          <LabeledSelectInput
+            key={value}
+            type="radio"
+            label={value}
+            value={value}
+            checked={radioSelection === value}
+            onChange={handleRadioChange}
+          />
+        ))}
+      </div>
+      <button
+        type="submit"
+        className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export default MyForm;
+```
