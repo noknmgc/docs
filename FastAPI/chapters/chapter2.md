@@ -1,24 +1,28 @@
-# Chapter2 ディレクトリ構成
+---
+title: Chapter2 ディレクトリ構成
+---
+
+<!-- omit in toc -->
+# ディレクトリ構成
 
 ここでは、FastAPI が配布しているテンプレート[フルスタック FastAPI PostgreSQL](https://github.com/tiangolo/full-stack-fastapi-postgresql)のディレクトリ構成を参考にし、ディレクトリを作成していきます。
 
+<!-- omit in toc -->
 ## 目次
 
-- [Chapter2 ディレクトリ構成](#chapter2-ディレクトリ構成)
-  - [目次](#目次)
-  - [ディレクトリ作成](#ディレクトリ作成)
-  - [各ディレクトリについて(スキップ可)](#各ディレクトリについてスキップ可)
-    - [api](#api)
-    - [core](#core)
-    - [crud](#crud)
-    - [db](#db)
-    - [models](#models)
-    - [schemas](#schemas)
-  - [Chapter1 のリファクタリング](#chapter1-のリファクタリング)
-    - [router を使ったファイル分け](#router-を使ったファイル分け)
-    - [動作確認](#動作確認)
-  - [Next: Chapter3 エンドポイントの作成](#next-chapter3-エンドポイントの作成)
-  - [Prev: Chapter1 FastAPI はじめのステップ](#prev-chapter1-fastapi-はじめのステップ)
+- [ディレクトリ作成](#ディレクトリ作成)
+- [各ディレクトリについて(スキップ可)](#各ディレクトリについてスキップ可)
+  - [api](#api)
+  - [core](#core)
+  - [crud](#crud)
+  - [db](#db)
+  - [models](#models)
+  - [schemas](#schemas)
+- [Chapter1 のリファクタリング](#chapter1-のリファクタリング)
+  - [router を使ったファイル分け](#router-を使ったファイル分け)
+  - [動作確認](#動作確認)
+- [Next: Chapter3 エンドポイントの作成](#next-chapter3-エンドポイントの作成)
+- [Prev: Chapter1 FastAPI はじめのステップ](#prev-chapter1-fastapi-はじめのステップ)
 
 ## ディレクトリ作成
 
