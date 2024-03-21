@@ -1,3 +1,7 @@
+---
+title: Chapter2 Reactの基本動作
+---
+
 <!-- omit in toc -->
 # Reactの基本動作
 

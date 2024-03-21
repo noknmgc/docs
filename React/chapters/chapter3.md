@@ -1,3 +1,7 @@
+---
+title: Chapter3 スタイリング
+---
+
 <!-- omit in toc -->
 # スタイリング
 
