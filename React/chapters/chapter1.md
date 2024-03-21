@@ -3,7 +3,7 @@ title: Chapter1 Reactの開発環境の準備
 ---
 
 <!-- omit in toc -->
-# Chapter1 Reactの開発環境の準備
+# Reactの開発環境の準備
 
 <!-- omit in toc -->
 ## 目次

@@ -1,3 +1,7 @@
+---
+title: Chapter4 状態管理 useState
+---
+
 <!-- omit in toc -->
 # 状態管理 useState
 
