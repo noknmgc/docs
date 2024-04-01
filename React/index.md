@@ -8,7 +8,7 @@
 - [Chapter2 Reactの基本動作](./chapters/chapter2.md)
 - [Chapter3 スタイリング](./chapters/chapter3.md)
 - [Chapter4 状態管理 useState](./chapters/chapter4.md)
-- [(作成中)Chapter5 その他の状態管理 useReducer, useContext](.)
+- [Chapter5 その他の状態管理 useReducer, useContext](./chapters/chapter5.md)
 - [(作成中)Chapter6 useEffect](.)
 - [(作成中)Chapter7 DOM操作 useRef, Portal](.)
 - [(作成中)Chapter8 カスタムフック](.)
