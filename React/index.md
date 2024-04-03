@@ -9,7 +9,7 @@
 - [Chapter3 スタイリング](./chapters/chapter3.md)
 - [Chapter4 状態管理 useState](./chapters/chapter4.md)
 - [Chapter5 その他の状態管理 useReducer, useContext](./chapters/chapter5.md)
-- [(作成中)Chapter6 useEffect](.)
+- [(作成中)Chapter6 useEffect](./chapters/chapter6.md)
 - [(作成中)Chapter7 DOM操作 useRef, Portal](.)
 - [(作成中)Chapter8 カスタムフック](.)
 - [(作成中)Chapter9 グローバルな状態管理zustand](.)
