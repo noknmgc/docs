@@ -1,5 +1,5 @@
 ---
-title: Chapter5 状態管理 useReducer, useContextその他の状態管理 useReducer, useContext
+title: Chapter5 その他の状態管理 useReducer, useContext
 ---
 
 <!-- omit in toc -->
