@@ -15,6 +15,7 @@ title: Chapter6 useEffect
     - [クリーアップ関数の役割](#クリーアップ関数の役割)
 - [useLayoutEffect](#uselayouteffect)
   - [useLayoutEffectの注意点](#uselayouteffectの注意点)
+- [Prev: Chapter5 その他の状態管理 useReducer, useContext](#prev-chapter5-その他の状態管理-usereducer-usecontext)
 
 ## 関数コンポーネントの処理による制限
 一度だけ実行したい内容がある場合、コンポーネントの先頭に処理を書くと、コンポーネントが再描画される度に実行されてしまいます。
@@ -429,3 +430,5 @@ export default Counter;
 
 ### useLayoutEffectの注意点
 公式の[useLayoutEffectのドキュメント](https://ja.react.dev/reference/react/useLayoutEffect)にもありますが、`useLayoutEffect`はパフォーマンスを低下させる可能性があります。可能な限り`useEffect`を使用することを推奨します。
+
+## [Prev: Chapter5 その他の状態管理 useReducer, useContext](../chapters/chapter5.md)

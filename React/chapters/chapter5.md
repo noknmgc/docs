@@ -16,6 +16,8 @@ title: Chapter5 状態管理 useReducer, useContextその他の状態管理 useR
   - [グローバルな状態管理(useContext)の目的](#グローバルな状態管理usecontextの目的)
   - [useContextの使い方](#usecontextの使い方)
   - [useContextのファイル分け](#usecontextのファイル分け)
+- [Next: Chapter6 useEffect](#next-chapter6-useeffect)
+- [Prev: Chapter4 状態管理　useState](#prev-chapter4-状態管理usestate)
 
 
 ## useReducerの使い方
@@ -670,3 +672,7 @@ export default ThemeSwitch;
 ```
 
 これで、これまでと全く同じ制御ができるはずです。`npm run dev`を実行し、結果をブラウザで確認してみてください。
+
+## [Next: Chapter6 useEffect](../chapters/chapter6.md)
+
+## [Prev: Chapter4 状態管理　useState](../chapters/chapter4.md)

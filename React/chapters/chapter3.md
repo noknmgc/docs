@@ -25,6 +25,7 @@ title: Chapter3 スタイリング
   - [Tailwindの注意点（動的なスタイル）](#tailwindの注意点動的なスタイル)
 - [まとめ](#まとめ)
 - [Next: Chapter4 状態管理 useState](#next-chapter4-状態管理-usestate)
+- [Prev: Chapter2 Reactの基本動作](#prev-chapter2-reactの基本動作)
 
 ## スタイリングを行うコンポーネントの追加
 スタイリングの対象となるボタンコンポーネントを作りましょう。
@@ -751,3 +752,5 @@ export default App;
 本資料では、Tailwind CSSを使っていきます。
 
 ## [Next: Chapter4 状態管理 useState](../chapters/chapter4.md)
+
+## [Prev: Chapter2 Reactの基本動作](../chapters/chapter2.md)

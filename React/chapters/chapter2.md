@@ -16,6 +16,7 @@ title: Chapter2 Reactの基本動作
   - [propsの特殊な例（children）](#propsの特殊な例children)
 - [特殊なコンポーネントReact.Fragment](#特殊なコンポーネントreactfragment)
 - [Next: Chapter３ スタイリング](#next-chapter３-スタイリング)
+- [Prev: Chapter1 Reactの開発環境の準備](#prev-chapter1-reactの開発環境の準備)
 
 ## Reactを動かしてみる
 以下のhtmlファイルを作成して、reactを動かしてみましょう。ここでの記述方法は、通常の開発で使うことはありませんので、覚える必要はありません。ここでは、Reactがどのような手順でhtmlに変更を加えているのかを確認してください。好きなディレクトリに以下の`index.html`を作成してください。
@@ -477,3 +478,5 @@ const Hello = () => {
 この`React.Fragment`は、React上では、一つの要素（コンポーネント）と解釈されますが、Reactが最終的に生成するHTMLでは、`React.Fragment`は消えた状態になります。
 
 ## [Next: Chapter３ スタイリング](../chapters/chapter3.md)
+
+## [Prev: Chapter1 Reactの開発環境の準備](../chapters/chapter1.md)
