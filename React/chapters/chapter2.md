@@ -228,7 +228,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-)
+);
 ```
 
 ここの内容は、HTMLに直接記述したものと同じような内容であることが分かると思います。
@@ -278,7 +278,7 @@ function App() {
   )
 }
 
-export default App
+export default App;
 ```
 
 ここには、実際にブラウザの画面上に表示されているものが定義されていることが分かると思います。後の章で説明しますが、`useState`を使った状態管理も行なっています。
@@ -331,9 +331,9 @@ export default App;
 ```javascript
 const Hello: React.FC = () => {
     return <h1>Hello React</h1>
-}
+};
 
-export default Hello
+export default Hello;
 ```
 
 それでは、作成したHelloコンポーネントを使って、`App.tsx`を書き換えましょう。
@@ -384,7 +384,7 @@ interface HelloProps {
 const Hello: React.FC<HelloProps> = (props) => {
   console.log(props)
   return <h1>Hello React</h1>
-}
+};
 ```
 
 Chromeの検証ツールからコンソールの出力を確認してみましょう。
@@ -459,7 +459,7 @@ Reactコンポーネントには、必ず１つの要素を返すというルー
 ```javascript
 const Hello = () => {
   return <div>Hello</div><div>React</div>;
-}
+};
 ```
 
 ただ、状況によっては、複数の要素を返すようなコンポーネントを作りたいことがあります。その時に利用するのが`React.Fragment`です。`React.Fragment`は、以下のコードに示すように`<>...</>`という構文で表せます。
