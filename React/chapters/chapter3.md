@@ -1,6 +1,5 @@
 ---
 title: Chapter3 スタイリング
-render_with_liquid: false
 ---
 
 <!-- omit in toc -->
