@@ -1,6 +1,7 @@
 ---
 title: Chapter5 その他の状態管理 useReducer, useContext
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # 状態管理 その他の状態管理 useReducer, useContext
@@ -676,3 +677,5 @@ export default ThemeSwitch;
 ## [Next: Chapter6 useEffect](../chapters/chapter6.md)
 
 ## [Prev: Chapter4 状態管理　useState](../chapters/chapter4.md)
+
+<!-- {% endraw %} -->

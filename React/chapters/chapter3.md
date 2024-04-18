@@ -1,6 +1,7 @@
 ---
 title: Chapter3 スタイリング
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # スタイリング
@@ -754,3 +755,5 @@ export default App;
 ## [Next: Chapter4 状態管理 useState](../chapters/chapter4.md)
 
 ## [Prev: Chapter2 Reactの基本動作](../chapters/chapter2.md)
+
+<!-- {% endraw %} -->

@@ -1,6 +1,7 @@
 ---
 title: Chapter6 useEffect
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # useEffect
@@ -435,3 +436,5 @@ export default Counter;
 ## [Next: Chapter7 DOM操作 useRef, Portal](../chapters/chapter7.md)
 
 ## [Prev: Chapter5 その他の状態管理 useReducer, useContext](../chapters/chapter5.md)
+
+<!-- {% endraw %} -->

@@ -1,6 +1,7 @@
 ---
 title: Chapter4 状態管理 useState
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # 状態管理 useState
@@ -682,3 +683,5 @@ export default MyForm;
 ## [Next: Chapter5 その他の状態管理 useReducer, useContext](../chapters/chapter5.md)
 
 ## [Prev: Chapter3 スタイリング](../chapters/chapter3.md)
+
+<!-- {% endraw %} -->

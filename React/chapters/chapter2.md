@@ -1,6 +1,7 @@
 ---
 title: Chapter2 Reactの基本動作
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # Reactの基本動作
@@ -480,3 +481,5 @@ const Hello = () => {
 ## [Next: Chapter３ スタイリング](../chapters/chapter3.md)
 
 ## [Prev: Chapter1 Reactの開発環境の準備](../chapters/chapter1.md)
+
+<!-- {% endraw %} -->
