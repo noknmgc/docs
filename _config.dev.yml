@@ -1,4 +1,4 @@
-prefix: "/docs"
+prefix: ""
 repository: noknmgc/docs
 
 theme: jekyll-theme-cayman
