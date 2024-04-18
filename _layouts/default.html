@@ -17,14 +17,14 @@
     <header class="page-header" role="banner">
       <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
       <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
-      <a href="/" class="btn">Home</a>
+      <a href="{{ site.prefix }}/" class="btn">Home</a>
       {% assign url_prefix = page.url | split: '/' %}
       {% if url_prefix.size > 1 %}
         {% if url_prefix[1] == 'React' %}
-          <a href="/React/" class="btn">React</a>
+          <a href="{{ site.prefix }}/React/" class="btn">React</a>
         {% endif %}
         {% if url_prefix[1] == 'FastAPI' %}
-          <a href="/FastAPI/" class="btn">FastAPI</a>
+          <a href="{{ site.prefix }}/FastAPI/" class="btn">FastAPI</a>
         {% endif %}
       {% endif %}
       {% if site.github.is_project_page %}
