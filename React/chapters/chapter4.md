@@ -25,7 +25,7 @@ title: Chapter4 状態管理 useState
 また、ここからはスタイリングはTailwindで行なっていきます。
 
 `src/App.tsx`
-```javascript
+```jsx
 function App() {
   return (
     <div className="m-4 space-y-2">
@@ -41,7 +41,7 @@ export default App;
 ここからは、ボタンを押すと画面に表示している数字が増えていくコンポーネントを作成しましょう。以下のファイルを作成してください。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 const Counter: React.FC = () => {
   return (
     <div>
@@ -57,7 +57,7 @@ export default Counter;
 作成した`Counter`コンポーネントを`App`コンポーネントに追加しましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import Counter from "./components/Counter";
 
 function App() {
@@ -81,7 +81,7 @@ export default App;
 変数`count`を用意して、ボタンのクリックイベントに`count += 1`とする関数を設定しましょう。`Counter`コンポーネントは以下のようになります。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 const Counter: React.FC = () => {
   let count = 0;
   return (
@@ -108,7 +108,7 @@ export default Counter;
 
 実際にやってみましょう。
 
-```javascript
+```jsx
 let count = 0;
 const Counter: React.FC = () => {
   return
@@ -125,7 +125,7 @@ const Counter: React.FC = () => {
 
 `useState`は関数で、引数には保持したい状態の初期値を渡します。引数で何も指定しない場合、`undefined`になります。`useState`の返値は、`[現在の状態, 状態更新の関数]`となります。
 
-```javascript
+```jsx
 import { useState } from "react";
 const [state, setState] = useState<number>(0);
 ```
@@ -137,14 +137,14 @@ const [state, setState] = useState<number>(0);
 - 新しい状態を渡すパターン
 
 `setState`の引数に新しい状態を渡せば、状態が渡した値に更新されます。
-```javascript
+```jsx
 seState(1)
 ```
 
 - 更新する処理を渡すパターン
 
 `setState`の引数には、関数を渡すこともできます。その関数の引数は現在の状態で、返値に新しい状態を指定します。
-```javascript
+```jsx
 setState((prev) => {
   return prev + 1;
 })
@@ -155,7 +155,7 @@ setState((prev) => {
 それでは、`useState`を使って`Counter`コンポーネントを作っていきましょう。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 import { useState } from "react";
 
 const Counter: React.FC = () => {
@@ -180,7 +180,7 @@ export default Counter;
 
 `button`に設定する`onClick`は、以下の２通りの実装方法があります。今回の場合は、どちらでも問題はありません。
 
-```javascript
+```jsx
 // 新しい値を指定する方法
 onClick={() => {
   setCount(count + 1);
@@ -198,7 +198,7 @@ onClick={() => {
 まずは、以下のファイルを作成しましょう。
 
 `src/components/TextInput.tsx`
-```javascript
+```jsx
 const TextInput = () => {
   return (
     <div>
@@ -213,7 +213,7 @@ export default TextInput;
 このコンポーネントを`src/App.tsx`に追加しましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import Counter from "./components/Counter";
 import TextInput from "./components/TextInput";
 
@@ -237,7 +237,7 @@ export default App;
 
 `TextInput`コンポーネントを以下のように修正します。
 
-```javascript
+```jsx
 import { useState } from "react";
 
 const TextInput = () => {
@@ -269,7 +269,7 @@ HTMLのinput要素は、typeによって様々な形式があります。どの�
 
 それでは、`type="number"`について試してみましょう。`TextInput`コンポーネントの`input`要素の`type`を`number`に変更しましょう。
 
-```javascript
+```jsx
 <input
   type="number"
   className="rounded-lg border border-gray-300 p-1"
@@ -292,7 +292,7 @@ Javascriptのオブジェクトや配列は、[ミュータブル](https://devel
 実際に、変更が検知されない例を試してみましょう。以下のコンポーネントを作成してください。
 
 `src/components/PersonDataInput.tsx`
-```javascript
+```jsx
 import { useState } from "react";
 
 const PersonDataInput = () => {
@@ -329,7 +329,7 @@ export default PersonDataInput;
 それでは、これを`App.tsx`に追加しましょう。
 
 `App.tsx`
-```javascript
+```jsx
 import Counter from "./components/Counter";
 import PersonDataInput from "./components/PersonDataInput";
 import TextInput from "./components/TextInput";
@@ -361,7 +361,7 @@ export default App;
 
 `PersonDataInput`コンポーネント内の`<input type="number"/>`の方だけ以下のように変えてみましょう。
 
-```javascript
+```jsx
 <input
   type="number"
   className="rounded-lg border border-gray-300 p-1"
@@ -385,7 +385,7 @@ export default App;
 
 最後に、どちらも変更を検知してくれるように、`<input type="text"/>`の方も変更しておきましょう。
 
-```javascript
+```jsx
 <input
   type="text"
   className="rounded-lg border border-gray-300 p-1"
@@ -405,7 +405,7 @@ export default App;
 また、見やすさのために、`LabeledInput`, `LabeledSelectInput`コンポーネントを作ります。
 
 `src/components/LabeledInput.tsx`
-```javascript
+```jsx
 interface LabeledInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -428,7 +428,7 @@ export default LabeledInput;
 ```
 
 `src/components/LabeledSelectInput.tsx`
-```javascript
+```jsx
 interface LabeledSelectInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -456,7 +456,7 @@ export default LabeledSelectInput;
 そしてこの２つのコンポーネントを使った`MyForm`コンポーネントは、以下の通りです。
 
 `src/components/MyForm.tsx`
-```javascript
+```jsx
 import LabeledInput from "./LabeledInput";
 import LabeledSelectInput from "./LabeledSelectInput";
 
@@ -557,7 +557,7 @@ export default MyForm;
 以下に解答例を示します。他の実装方法もたくさんあります。チームのコード規約にあった実装にしましょう。
 
 `src/components/MyForm.tsx`
-```javascript
+```jsx
 import { useState } from "react";
 import LabeledInput from "./LabeledInput";
 import LabeledSelectInput from "./LabeledSelectInput";
