@@ -144,7 +144,7 @@ style propsは以下のように適用します。`StyledButton.tsx`にボタン
 
 また、今後ボタンが複数並ぶので、みやすいようにgridも作成しています。
 
-```javascript
+```jsx
 const StyledButton: React.FC = () => {
   return (
     <div
