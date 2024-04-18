@@ -1,6 +1,7 @@
 ---
 title: Chapter3 スタイリング
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # スタイリング
@@ -32,7 +33,7 @@ title: Chapter3 スタイリング
 
 以下の`src/components/StyledButton.tsx`を作成してください。
 `src/components/StyledButton.tsx`
-```javascript
+```jsx
 const StyledButton: React.FC = () => {
   return (
     <>
@@ -46,7 +47,7 @@ export default StyledButton;
 
 このボタンが画面に表示されるように、`App`コンポーネントも変更しましょう。
 `src/App.tsx`
-```javascript
+```jsx
 import StyledButton from "./components/StyledButton";
 
 function App() {
@@ -110,7 +111,7 @@ export default App;
 `StyledButton.tsx`を以下のように修正しましょう。
 
 `src/components/StyledButton.tsx`
-```javascript
+```jsx
 import "./custom-button.css";
 
 const StyledButton: React.FC = () => {
@@ -226,7 +227,7 @@ css modulesでは、cssは通常通り記述するのですが、最終的に適
 
 それでは、作成したファイルを読み込んでいきましょう。
 CSS Modulesでは、以下のようにimportして使います。
-```javascript
+```jsx
 import styles from "./custom-button.module.css"
 ```
 このimportした`styles`を見てみると
@@ -234,14 +235,14 @@ import styles from "./custom-button.module.css"
 {"custom-button":"_custom-button_1317u_1"}
 ```
 となっており、`"_custom-button_1317u_1"`は、自動生成されたクラス名です。したがって、`styles["custom-button"]`を`className`に指定しましょう。
-```javascript
+```jsx
 <button className={styles["custom-button"]}>Push</button>
 ```
 
 `StyledButton.tsx`を以下のように修正しましょう。
 
 `src/components/StyledButton.tsx`
-```javascript
+```jsx
 import "./custom-button.css";
 import styles from "./custom-button.module.css";
 
@@ -310,7 +311,7 @@ CSS-in-JSのライブラリは、複数ありますが、ここでは、最も�
 
 ### styled-componentsについて
 styled-componentsでは、以下の公式サイトのサンプルのように、HTML要素にスタイルをつけたものをコンポーネントとして定義することができるようになります。
-```javascript
+```jsx
 import styled from "styled-components";
 
 // Create a Title component that'll render an <h1> tag with some styles
@@ -337,7 +338,7 @@ render(
 ```
 
 また、styled-compoentnsは、コンポーネントなので、以下のようにpropsを渡すこともでき、動的なスタイルも定義できます。
-```javascript
+```jsx
 import styled from "styled-components";
 
 const Button = styled.button<{ $primary?: boolean; }>`
@@ -378,7 +379,7 @@ styled-componentsは、javascriptにcssを記述するため、デフォルト�
 
 `StyledButton.tsx`に以下の記述を追加してください。
 
-```javascript
+```jsx
 import styled from "styled-components";
 
 const CustomButton = styled.button`
@@ -409,7 +410,7 @@ const CustomButton = styled.button`
 
 ここで、定義した`CustomButton`を`StyledButton`コンポーネントに追加しましょう。
 
-```javascript
+```jsx
 const StyledButton: React.FC = () => {
   return (
     <div
@@ -450,7 +451,7 @@ const StyledButton: React.FC = () => {
 以上が、styled-componentsの使い方です。CSS in JSは、styled-componentsの他にも[Emotion](https://emotion.sh/docs/introduction)や[Linaria](https://linaria.dev/)などがあります。
 
 emotionは、styled-componentsを拡張したもので、styled-componentsと同じ記法も使えますが、以下のようにcssとcssというpropsに渡すことでもスタイルを定義することができます。
-```javascript
+```jsx
 import { css } from '@emotion/react'
 
 const color = 'white'
@@ -506,7 +507,7 @@ tailwindは、cssだと`display: flex;`を適用させたい場合は、クラ�
 ```
 
 tailwindを利用すると以下をclassNameに指定することになります。
-```javascript
+```jsx
 className="flex items-center px-4 py-3 text-white bg-blue-500 hover:bg-blue-400"
 ```
 
@@ -530,7 +531,7 @@ npx tailwindcss init -p
 ```
 
 上記コマンド実行後、`tailwind.config.js`というファイルが作成されるので、Tailwindを使うファイルを以下のように指定します。
-```javascript
+```jsx
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -574,7 +575,7 @@ Tailwindは、独自の構文を使っているので、予測変換が効くよ
 まず、デフォルトのスタイルが適用されなくなるので、見やすさのために、`App.tsx`を以下のように修正してください。
 
 `src/App.tsx`
-```javascript
+```jsx
 import StyledButton from "./components/StyledButton";
 
 function App() {
@@ -590,7 +591,7 @@ export default App;
 
 それでは、Tailwindでこれまでと同じボタンを作っていきましょう。
 Tailwindを使うと以下のようになります。
-```javascript
+```jsx
 <button className="mb-2 me-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
   Push
 </button>
@@ -599,7 +600,7 @@ Tailwindを使うと以下のようになります。
 このボタンを`StyledButton.tsx`に追加します。
 
 `src/components/StyledButton.tsx`
-```javascript
+```jsx
 import "./custom-button.css";
 import styles from "./custom-button.module.css";
 import styled from "styled-components";
@@ -704,7 +705,7 @@ Tailwindで動的なスタイルを定義しようとした時に、うまくス
 `App.tsx`を以下のようにしてみましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import StyledButton from "./components/StyledButton";
 
 function App() {
@@ -726,7 +727,7 @@ export default App;
 今度は、`App.tsx`を少し変えて、以下のようにします。
 
 `src/App.tsx`
-```javascript
+```jsx
 import StyledButton from "./components/StyledButton";
 
 function App() {
@@ -754,3 +755,5 @@ export default App;
 ## [Next: Chapter4 状態管理 useState](../chapters/chapter4.md)
 
 ## [Prev: Chapter2 Reactの基本動作](../chapters/chapter2.md)
+
+<!-- {% endraw %} -->

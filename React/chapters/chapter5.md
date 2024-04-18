@@ -1,6 +1,7 @@
 ---
 title: Chapter5 その他の状態管理 useReducer, useContext
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # 状態管理 その他の状態管理 useReducer, useContext
@@ -23,7 +24,7 @@ title: Chapter5 その他の状態管理 useReducer, useContext
 ## useReducerの使い方
 useReducerもuseStateと同じように、状態管理を行うものです。状態更新の方法が異なります。簡単にuseReducerの使い方を見ていきましょう。
 
-```javascript
+```jsx
 import { useReducer } from 'react';
 
 const reducer = (state, action) => {
@@ -55,7 +56,7 @@ const MyComponent = () => {
 - `action`:`dispatch`に渡されたオブジェクト
 
 `action`には、Reactの慣習的に以下のようなプロパティを持ちます。
-```javascript
+```jsx
 interface Action {
   type: string;
   payload: any;
@@ -64,7 +65,7 @@ interface Action {
 
 `reducer`では、`action.type`に応じて、状態の変更を行います。また、状態の変更に必要な値やオブジェクトがある場合、`payload`にそれを指定します。
 
-```javascript
+```jsx
 const reducer = (state, action) => {
   switch (action.type) {
     case "increment_age":
@@ -79,7 +80,7 @@ const reducer = (state, action) => {
 
 上記のような`reducer`を指定した場合、`dispatch`は以下のように使用します。
 
-```javascript
+```jsx
 const MyComponent = () => {
   const [state, dispatch] = useReducer(reducer, { age: 42 });
   // ageを+1する場合
@@ -92,7 +93,7 @@ const MyComponent = () => {
 
 この資料では、typescriptも使用するので、型も定義しましょう。`useReducer`を利用する場合、`state`と`action`の型の定義が必要です。この例の場合、以下のように定義します。
 
-```javascript
+```jsx
 type Action =
   | {
       type: "increment_age";
@@ -129,7 +130,7 @@ const reducer = (state: State, action: Action) => {
 `MyFormReducer`コンポーネントをつくります。
 
 `src/components/MyFormReducer.tsx`
-```javascript
+```jsx
 import { useReducer } from "react";
 import LabeledInput from "./LabeledInput";
 import LabeledSelectInput from "./LabeledSelectInput";
@@ -204,7 +205,7 @@ export default MyFormReducer;
 `App.tsx`に`MyFormReducer`を追加しましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import MyFormReducer from "./components/MyFormReducer";
 
 function App() {
@@ -223,7 +224,7 @@ export default App;
 ### 解答例
 以下に解答例を示します。他の実装方法もたくさんあります。
 
-```javascript
+```jsx
 import { useReducer } from "react";
 import LabeledInput from "./LabeledInput";
 import LabeledSelectInput from "./LabeledSelectInput";
@@ -375,7 +376,7 @@ Reactでは、コンポーネント間の状態の共有は、`props`を利用�
 まず、`App`コンポーネント内に`theme`という値を保持しましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import { useState } from "react";
 import MyFormReducer from "./components/MyFormReducer";
 
@@ -394,7 +395,7 @@ export default App;
 `App`に保持している`theme`と`setTheme`を`useContext`を使って、各コンポーネントに共有していきます。
 まず、`App.tsx`に以下を追加します。（`App`コンポーネントの外に記述してください。）
 
-```javascript
+```jsx
 import { createContext, useState } from "react";
 import MyFormReducer from "./components/MyFormReducer";
 
@@ -411,7 +412,7 @@ function App() {
 `createContext`の引数には、共有する状態の初期値を渡してください。この`ThemeContext`を使って`App`コンポーネントを以下のように書き換えます。
 `App`コンポーネントの返値を、`ThemeContext.Provider`コンポーネントで囲い、グローバルに共有したい値を`ThemeContext.Provider`コンポーネントの`value`に指定します。
 
-```javascript
+```jsx
 function App() {
   const [theme, setTheme] = useState("light");
   return (
@@ -429,7 +430,7 @@ function App() {
 それでは、グローバルに共有されている値を、`LabeledInput`コンポーネントで読み取って見ましょう。`LabeledInput`を以下のように書き換えましょう。
 
 `src/components/LabeledInput.tsx`
-```javascript
+```jsx
 import { useContext } from "react";
 import { ThemeContext } from "../App";
 
@@ -462,7 +463,7 @@ export default LabeledInput;
 それでは、`LabeledInput`が`theme`によってスタイルが変わるようにしましょう。それぞれのコンポーネントを以下のように書き換えてください。
 
 `src/components/LabeledInput.tsx`
-```javascript
+```jsx
 import { useContext } from "react";
 import { ThemeContext } from "../App";
 
@@ -492,7 +493,7 @@ export default LabeledInput;
 さらに`theme`を切り替えるボタンを用意しましょう。新たに`ThemeSwitch`コンポーネントを用意し、`useContext`を使って`setTheme`を参照し、`teheme`の値を制御しましょう。以下のファイル作成してください。
 
 `src/components/ThemeSwitch.tsx`
-```javascript
+```jsx
 import { useContext } from "react";
 import LabeledSelectInput from "./LabeledSelectInput";
 import { ThemeContext } from "../App";
@@ -523,7 +524,7 @@ export default ThemeSwitch;
 このコンポーネントを利用することで、`theme`の値を変更できます。このコンポーネントを`App`に追加しましょう。`App.tsx`を以下のように変更します。
 
 `srx/App.tsx`
-```javascript
+```jsx
 import { createContext, useState } from "react";
 import MyFormReducer from "./components/MyFormReducer";
 import ThemeSwitch from "./components/ThemeSwitch";
@@ -562,7 +563,7 @@ export default App;
 `useContext`をつかった状態管理では、`src/context`ディレクトリ配下で行います。以下のファイルを作成してください。
 
 `src/context/ThemeContext.tsx`
-```javascript
+```jsx
 import { createContext, useContext, useState } from "react";
 
 const ThemeContext = createContext<{
@@ -595,7 +596,7 @@ export const useTheme = () => useContext(ThemeContext);
 
 まず、`App`コンポーネントは、`ThemeProvider`を使うと以下のようになります。
 
-```javascript
+```jsx
 import MyFormReducer from "./components/MyFormReducer";
 import ThemeSwitch from "./components/ThemeSwitch";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -617,7 +618,7 @@ export default App;
 `theme`や`setTheme`を参照している`LabeledInput`、`ThemeSwitch`は、`useTheme`を使って以下のようになります。
 
 `src/components/LabeledInput.tsx`
-```javascript
+```jsx
 import { useTheme } from "../context/ThemeContext";
 
 interface LabeledInputProps
@@ -644,7 +645,7 @@ export default LabeledInput;
 ```
 
 `src/components/ThemeSwitch.tsx`
-```javascript
+```jsx
 import { useTheme } from "../context/ThemeContext";
 import LabeledSelectInput from "./LabeledSelectInput";
 
@@ -676,3 +677,5 @@ export default ThemeSwitch;
 ## [Next: Chapter6 useEffect](../chapters/chapter6.md)
 
 ## [Prev: Chapter4 状態管理　useState](../chapters/chapter4.md)
+
+<!-- {% endraw %} -->

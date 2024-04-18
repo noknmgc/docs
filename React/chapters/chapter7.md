@@ -1,6 +1,7 @@
 ---
 title: Chapter7 DOM操作 useRef, Portal
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # DOM操作　useRef, Portal
@@ -39,7 +40,7 @@ Reactでは、自動的にDOMを更新するので、基本的にDOM操作をす
 まず、`useRef`の使い方を見ていくコンポーネントを作っていきましょう。以下のファイルを作成します。
 
 `src/components/ControlDOM.tsx`
-```javascript
+```jsx
 const ControlDOM: React.FC = () => {
   return <></>;
 };
@@ -50,7 +51,7 @@ export default ControlDOM;
 結果を確認するために、`App`コンポーネントを以下のように修正しましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import ControlDOM from "./components/ControlDOM";
 
 function App() {
@@ -70,7 +71,7 @@ export default App;
 `useRef`は以下のようにDOM操作を行いたい要素に対して、`ref`propsの設定を行います。
 
 `src/components/ControlDOM.tsx`
-```javascript
+```jsx
 import { useRef } from "react";
 
 const ControlDOM: React.FC = () => {
@@ -89,7 +90,7 @@ export default ControlDOM;
 ボタンを押すとinput要素にフォーカスが当たるコンポーネントを作ります。`ControlDOM`コンポーネントを以下のように修正してください。
 
 `src/components/ControlDOM.tsx`
-```javascript
+```jsx
 import { useRef } from "react";
 
 const ControlDOM: React.FC = () => {
@@ -130,7 +131,7 @@ export default ControlDOM;
 それでは、スクロールをする例を見ていきます。
 幅の最大値を制限した場所にA,B,Cという文字を配置しました。その上に同じく、A,B,Cのボタンを配置しました。ボタンを押すとそれに対応した文字にスクロールするようにしました。
 
-```javascript
+```jsx
 import { useRef } from "react";
 
 const ControlDOM: React.FC = () => {
@@ -215,7 +216,7 @@ export default ControlDOM;
 
 次は、動画の再生・停止を行う例です。動画とその上にボタンを配置しました。再生しているかどうかをstateとして保持させ、ボタンを押すと再生していない場合は再生、再生している場合は停止を行います。
 
-```javascript
+```jsx
 import { useRef, useState } from "react";
 
 const ControlDOM: React.FC = () => {
@@ -333,7 +334,7 @@ export default ControlDOM;
 
 以下は、公式サイト[(refで値を参照する)](https://ja.react.dev/learn/referencing-values-with-refs)の例になります。
 
-```javascript
+```jsx
 import { useRef } from 'react';
 
 export default function Counter() {
@@ -357,3 +358,5 @@ DOMの位置を手動で設定したい場合、`Portal`を使うことで実装
 
 
 ## [Prev: Chapter6 useEffect](../chapters/chapter6.md)
+
+<!-- {% endraw %} -->

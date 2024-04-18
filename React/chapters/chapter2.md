@@ -1,6 +1,7 @@
 ---
 title: Chapter2 Reactの基本動作
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # Reactの基本動作
@@ -110,7 +111,7 @@ Reactでは、コンポーネントと呼ばれる単位で、コードを記述
 
 コンポーネントは、以下のように関数で定義し、必ず最初の文字を大文字で定義します。
 
-```javascript
+```jsx
 const Hello = () => {
     return <h1>Hello React</h1>
 }
@@ -218,7 +219,7 @@ npm run dev
 `src/main.tsx`を開いてみてください。
 
 `src/main.tsx`
-```javascript
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
@@ -243,7 +244,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 次は、`App`コンポーネントについてみてみましょう。`src/App.tsx`を開いてください。
 
 `src/App.tsx`
-```javascript
+```jsx
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -285,7 +286,7 @@ export default App;
 
 それでは、この`App.tsx`をもっと単純なものに書き換えてみましょう。
 
-```javascript
+```jsx
 function App() {
   return (
     <h1>Hello React</h1>
@@ -328,7 +329,7 @@ export default App;
 ```
 
 `Hello.tsx`
-```javascript
+```jsx
 const Hello: React.FC = () => {
     return <h1>Hello React</h1>
 };
@@ -339,7 +340,7 @@ export default Hello;
 それでは、作成したHelloコンポーネントを使って、`App.tsx`を書き換えましょう。
 
 `App.tsx`
-```javascript
+```jsx
 import Hello from "./components/Hello";
 
 function App() {
@@ -361,7 +362,7 @@ Reactはコンポーネントという単位で、細かくコードを分けて
 それでは、Appコンポーネントから、Helloコンポーネントにstringを渡してみましょう。
 
 まず、値を渡す側Appは、以下のように記述します。
-```javascript
+```jsx
 function App() {
   return (
     <Hello target="React"/>
@@ -370,13 +371,13 @@ function App() {
 ```
 
 このようにすると、Helloコンポーネントに以下のようなオブジェクトが渡されます。
-```javascript
+```jsx
 { target: "React" }
 ```
 それでは、Helloコンポーネントでは、どのように値が渡されているか確認しましょう。
 Helloコンポーネントの中身を以下のように変更してください。
 
-```javascript
+```jsx
 interface HelloProps {
   target: string;
 }
@@ -391,7 +392,7 @@ Chromeの検証ツールからコンソールの出力を確認してみまし�
 
 それでは、propsで渡された値を使ってみましょう。javascriptの分割代入を使うことで、propsの中身を受け取ります。
 
-```javascript
+```jsx
 const Hello: React.FC<HelloProps> = ({ target }) => {
   return <h1>Hello {target}</h1>;
 };
@@ -407,7 +408,7 @@ propsで渡す値の中で`children`は、渡し方が異なります。この`c
 それでは、`Hello`コンポーネントが`children`を受け取るように改造しましょう。
 
 `Hello.tsx`
-```javascript
+```jsx
 interface HelloProps {
   target: string;
   children: React.ReactNode;
@@ -428,7 +429,7 @@ export default Hello;
 次にHelloコンポーネントを使っている`App.tsx`も修正しましょう。
 
 `App.tsx`
-```javascript
+```jsx
 function App() {
   return <Hello target="React">Hi</Hello>;
 }
@@ -442,7 +443,7 @@ function App() {
 
 この`children`には、今回のように文字列は、もちろんですが、HTML要素、コンポーネントも渡すことができます。以下のように色々変更してみてください。
 
-```javascript
+```jsx
 function App() {
   return (
     <Hello target="React">
@@ -456,7 +457,7 @@ function App() {
 Reactコンポーネントには、必ず１つの要素を返すというルールがあります。（複数の要素を変えることはできない）
 
 例えば、以下のように複数のHTML要素を変えそうとすると、エラーになることが分かります。
-```javascript
+```jsx
 const Hello = () => {
   return <div>Hello</div><div>React</div>;
 };
@@ -464,7 +465,7 @@ const Hello = () => {
 
 ただ、状況によっては、複数の要素を返すようなコンポーネントを作りたいことがあります。その時に利用するのが`React.Fragment`です。`React.Fragment`は、以下のコードに示すように`<>...</>`という構文で表せます。
 
-```javascript
+```jsx
 const Hello = () => {
   return (
     <>
@@ -480,3 +481,5 @@ const Hello = () => {
 ## [Next: Chapter３ スタイリング](../chapters/chapter3.md)
 
 ## [Prev: Chapter1 Reactの開発環境の準備](../chapters/chapter1.md)
+
+<!-- {% endraw %} -->
