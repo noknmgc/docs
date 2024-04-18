@@ -1,6 +1,7 @@
 ---
 title: Chapter6 useEffect
 ---
+<!-- {% raw %} -->
 
 <!-- omit in toc -->
 # useEffect
@@ -15,6 +16,7 @@ title: Chapter6 useEffect
     - [クリーアップ関数の役割](#クリーアップ関数の役割)
 - [useLayoutEffect](#uselayouteffect)
   - [useLayoutEffectの注意点](#uselayouteffectの注意点)
+- [Next: Chapter7 DOM操作 useRef, Portal](#next-chapter7-dom操作-useref-portal)
 - [Prev: Chapter5 その他の状態管理 useReducer, useContext](#prev-chapter5-その他の状態管理-usereducer-usecontext)
 
 ## 関数コンポーネントの処理による制限
@@ -23,7 +25,7 @@ title: Chapter6 useEffect
 少し例を見てみましょう。以前作成した`Counter`コンポーネントに2秒後に`count`を10増やすという処理を加えます。以下のように修正してください。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 import { useState } from "react";
 
 const Counter: React.FC = () => {
@@ -54,7 +56,7 @@ export default Counter;
 結果を確認するために、`App`コンポーネントを以下のように書き換えます。
 
 `src/App.tsx`
-```javascript
+```jsx
 import Counter from "./components/Counter";
 
 function App() {
@@ -85,7 +87,7 @@ export default App;
 
 `useEffect`は以下のように記述します。
 
-```javascript
+```jsx
 import { useEffect } from "react";
 
 const MyComponent: React.FC = () => {
@@ -112,7 +114,7 @@ const MyComponent: React.FC = () => {
 [関数コンポーネントの処理による制限](#関数コンポーネントの処理による制限)で作成した`Counter`コンポーネントを`useEffect`を使って`setTimeout`の処理を1度だけ実行するようにしましょう。`Counter`コンポーネントを以下のように変更します。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 import { useEffect, useState } from "react";
 
 const Counter: React.FC = () => {
@@ -155,7 +157,7 @@ APIから取得した値によって、画面の表示や選択肢が変わる�
 
 実際に、[国民の祝日API](https://national-holidays.jp/about.html)を利用して、入力された日付の祝日の名前を取得するコンポーネントを作ってみましょう。
 
-```javascript
+```jsx
 import { useEffect, useState } from "react";
 
 const Holiday: React.FC = () => {
@@ -197,7 +199,7 @@ export default Holiday;
 
 `App`コンポーネントに追加して実行結果を確認してみてください。
 
-```javascript
+```jsx
 import Holiday from "./components/Holiday";
 
 function App() {
@@ -219,7 +221,7 @@ windowにイベントを紐付けたい場合にも使われます。windowに�
 少し例を見てみましょう。windowのpointermoveイベントに紐づけて、ポインターの座標を表示するコンポーネントを作ります。以下のファイルを作成してください。
 
 `src/components/PointerPosition.tsx`
-```javascript
+```jsx
 import { useEffect, useState } from "react";
 
 const PointerPosition: React.FC = () => {
@@ -245,7 +247,7 @@ export default PointerPosition;
 `App`コンポーネントに追加して実行結果を確認してみてください。
 
 `src/App.tsx`
-```javascript
+```jsx
 import PointerPosition from "./components/PointerPosition";
 
 function App() {
@@ -264,7 +266,7 @@ export default App;
 #### クリーアップ関数の役割
 ここでクリーアップ関数の役割を見てみましょう。`PointerPosition`コンポーネントを以下のように変更してください。
 
-```javascript
+```jsx
 import { useEffect, useState } from "react";
 
 const PointerPosition: React.FC = () => {
@@ -289,7 +291,7 @@ export default PointerPosition;
 
 次は、`PointerPosition`コンポーネントがマウント・アンマウントされるように`App.tsx`を以下のように変更します。
 
-```javascript
+```jsx
 import { useState } from "react";
 import PointerPosition from "./components/PointerPosition";
 
@@ -328,7 +330,7 @@ export default App;
 それでは、`PointerPosition`コンポーネントの`useEffect`にクリーンアップ関数を戻しましょう。以下のように変更してください。
 
 `PointerPosition`コンポーネントの`useEffect`
-```javascript
+```jsx
 useEffect(() => {
   window.addEventListener("pointermove", handlePointerMove);
   return () => {
@@ -348,7 +350,7 @@ Reactには、`useEffect`と非常によく似た`useLayoutEffect`というも�
 具体的に動作を見ていきましょう。`Counter`コンポーネントで、`useEffect`でカウントが10以上になったら0にリセットするという動作を入れてみましょう。`Counter`コンポーネントを以下のように修正してください。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 import { useEffect, useState } from "react";
 
 const Counter: React.FC = () => {
@@ -379,7 +381,7 @@ export default Counter;
 それでは、`App`コンポーネントに`Counter`コンポーネントを追加し、動作を見てみましょう。
 
 `src/App.tsx`
-```javascript
+```jsx
 import Counter from "./components/Counter";
 
 function App() {
@@ -398,7 +400,7 @@ export default App;
 それでは、`useEffect`を`useLayoutEffect`に変えてみましょう。
 
 `src/components/Counter.tsx`
-```javascript
+```jsx
 import { useLayoutEffect, useState } from "react";
 
 const Counter: React.FC = () => {
@@ -431,4 +433,8 @@ export default Counter;
 ### useLayoutEffectの注意点
 公式の[useLayoutEffectのドキュメント](https://ja.react.dev/reference/react/useLayoutEffect)にもありますが、`useLayoutEffect`はパフォーマンスを低下させる可能性があります。可能な限り`useEffect`を使用することを推奨します。
 
+## [Next: Chapter7 DOM操作 useRef, Portal](../chapters/chapter7.md)
+
 ## [Prev: Chapter5 その他の状態管理 useReducer, useContext](../chapters/chapter5.md)
+
+<!-- {% endraw %} -->
