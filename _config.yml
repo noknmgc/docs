@@ -1,3 +1,9 @@
+title: 技術資料
+description: ここは、技術資料を公開しているサイトです。
+url: "https://github.com/noknmgc/docs"
+repository: noknmgc/docs
+
+markdown: kramdown
 theme: jekyll-theme-cayman
 google_analytics: G-JMMJXXVPM9
 plugins:
