@@ -1,10 +1,10 @@
 ---
-title: Chapter7 DOM操作 useRef, Portal
+title: Chapter7 DOM操作 useRef, createPortal
 ---
 <!-- {% raw %} -->
 
 <!-- omit in toc -->
-# DOM操作　useRef, Portal
+# DOM操作　useRef, createPortal
 
 <!-- omit in toc -->
 ## 目次
@@ -16,7 +16,8 @@ title: Chapter7 DOM操作 useRef, Portal
     - [要素へのスクロール](#要素へのスクロール)
     - [動画の再生・停止](#動画の再生停止)
   - [付録：useRefで値を保存する](#付録userefで値を保存する)
-- [Portal（作成中）](#portal作成中)
+- [createPortal](#createportal)
+  - [createPortalの引数](#createportalの引数)
 - [Prev: Chapter6 useEffect](#prev-chapter6-useeffect)
 
 
@@ -353,9 +354,139 @@ export default function Counter() {
 }
 ```
 
-## Portal（作成中）
-DOMの位置を手動で設定したい場合、`Portal`を使うことで実装できます。
+## createPortal
+DOMの位置を手動で設定したい場合、`createPortal`を使うことで実装できます。
 
+DOMの位置を手動で設定する目的としては、以下のようなものが挙げられます。
+- モーダル画面などをスタイルが競合しないように、外側に配置する。
+- Reactで構築されていないHTMLに、Reactのコンポーネントを配置する。
+
+それでは、モーダル画面を例に`createPortal`の使い方を見ていきましょう。
+
+まずは、コンポーネントの準備をしましょう。以下のファイルを作成してください。
+
+`src/components/PortalExample.tsx`
+```jsx
+const PortalExample: React.FC = () => {
+  return <></>;
+};
+
+export default PortalExample;
+```
+
+`PortalExample`コンポーネントが描画されるように`App`コンポーネントを修正しましょう。
+
+```jsx
+import PortalExample from "./components/PortalExample";
+
+function App() {
+  return (
+    <div className="m-4 space-y-2">
+      <PortalExample />
+    </div>
+  );
+}
+
+export default App;
+```
+
+ここから`PortalExample`を編集していきますが、まずはポータルを使わずにスタイルが競合した状態で、記述していきましょう。
+
+`src/components/PortalExample.tsx`
+```jsx
+import { useState } from "react";
+
+const PortalExample: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleClick = () => {
+    setIsOpen((prev) => !prev);
+  };
+  return (
+    <div className="relative h-40 w-60 overflow-hidden border p-3">
+      <button className="border bg-gray-300 px-1" onClick={handleClick}>
+        open
+      </button>
+      {/* モーダル */}
+      {isOpen && (
+        <div className="absolute left-20 top-20 flex w-60 items-center justify-between rounded-lg border-2 bg-white p-3 shadow-lg">
+          <div>Modal</div>
+          <button className="border bg-gray-300 px-1" onClick={handleClick}>
+            close
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PortalExample;
+```
+
+それでは、`npm run dev`を実行し、ブラウザで結果を見ていきましょう。openボタンが描画されるはずなので、ボタンを押してモーダルを表示させましょう。
+
+![正しく描画されていないモーダル画面](../images/ch7_modal_before.png)
+
+これは、`position: relative;`の下に`position: absolute;`となっているモーダル画面が来ているために起こります。
+
+Chromeの検証ツールでDOMも確認してみましょう。検証ツールを開いて(f12キーを押す)、Elements(要素)のタブを見てください。以下のようになっているはずです。
+
+![正しく描画されていないモーダル画面のDOM](../images/ch7_modal_before_dom.png)
+
+
+それでは、`createPortal`を使用してDOM配置を変え、この競合を解消していきましょう。`PortalExample`コンポーネントに`ModalPortal`コンポーネントを作成し、そのコンポーネントに渡された`children`を`createPortal`を使ってDOMの配置を変えます。以下のように修正します。
+
+`src/components/PortalExample.tsx`
+```jsx
+import { useState } from "react";
+import { createPortal } from "react-dom";
+
+const ModalPortal: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const target = document.body;
+  return createPortal(children, target);
+};
+
+const PortalExample: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleClick = () => {
+    setIsOpen((prev) => !prev);
+  };
+  return (
+    <div className="relative h-40 w-60 overflow-hidden border p-3">
+      <button className="border bg-gray-300 px-1" onClick={handleClick}>
+        open
+      </button>
+      {/* モーダル */}
+      {isOpen && (
+        <ModalPortal>
+          <div className="absolute left-20 top-20 flex w-60 items-center justify-between rounded-lg border-2 bg-white p-3 shadow-lg">
+            <div>Modal</div>
+            <button className="border bg-gray-300 px-1" onClick={handleClick}>
+              close
+            </button>
+          </div>
+        </ModalPortal>
+      )}
+    </div>
+  );
+};
+
+export default PortalExample;
+```
+
+`ModalPortal`コンポーネントにモーダル画面を渡すことで、モーダル画面のDOMの配置がdocumentのbodyに移動します。`npm run dev`を実行し、ブラウザで実行結果を確認しましょう。
+
+![正常に動作しているモーダル画面](../images/ch7_modal_after.png)
+
+それでは、DOMも確認してみましょう。Chromeの検証ツールを開いて、Elements(要素)のタブを開いてください。
+
+![正常に動作しているモーダル画面のDOM](../images/ch7_modal_after_dom.png)
+
+モーダル画面のDOMがbodyタグのなかに追加されていることが分かります。これで、`position: relative;`の外にモーダル画面が配置されるので、意図通りにモーダル画面を実装することができました。
+
+### createPortalの引数
+上記の例では、`createPortal(children, target)`として、`target`には`document.body`を渡していますが、ここには`HTMLElement`を渡せば良いので、`document.body`以外でも大丈夫です。
+
+例えば、ある特定の要素の下に配置したい場合、`const target = document.querySelector(".container");`として、`<div className="container">{...}</div>`を指定しても良いですし、`useRef`を使って`<div ref={ref}></div>`とした`ref.current`を渡しても良いです。
 
 ## [Prev: Chapter6 useEffect](../chapters/chapter6.md)
 
