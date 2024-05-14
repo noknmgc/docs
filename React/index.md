@@ -4,10 +4,13 @@ title: React
 
 # はじめに
 
-ここでは、Reactをすぐ使えるようになるための手順を紹介します。本資料では、javascript, typescriptについては、すでに理解していることを前提に進めます。
+ここでは、Reactをすぐ使えるようになるための手順を紹介します。
+本資料では、javascript, typescriptについては、すでに理解していることを前提に進めます。
+
 
 # 目次
 
+- [Chapter0 なぜReactを使うのか？](./chapters/chapter0.md)
 - [Chapter1 React開発環境の準備](./chapters/chapter1.md)
 - [Chapter2 Reactの基本動作](./chapters/chapter2.md)
 - [Chapter3 スタイリング](./chapters/chapter3.md)
