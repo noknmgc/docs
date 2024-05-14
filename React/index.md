@@ -15,6 +15,6 @@ title: React
 - [Chapter5 その他の状態管理 useReducer, useContext](./chapters/chapter5.md)
 - [Chapter6 useEffect](./chapters/chapter6.md)
 - [Chapter7 DOM操作 useRef, createPortal](./chapters/chapter7.md)
-- [(作成中)Chapter8 カスタムフック](./chapters/chapter8.md)
-- [(作成中)Chapter9 グローバルな状態管理zustand](.)
+- [Chapter8 カスタムフック](./chapters/chapter8.md)
+- [Chapter9 グローバルな状態管理zustand](./chapters/chapter9.md)
 - [(作成中)ChapterX ディレクトリ構成](.)
