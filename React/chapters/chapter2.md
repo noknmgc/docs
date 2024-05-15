@@ -536,6 +536,7 @@ function App() {
 }
 ```
 
+[Appendix A : key propを正しく設定しなかった時に発生する問題](../chapters/AppendixA.md#key-propを正しく設定しなかった時に発生する問題)で、`key` propに配列のindexを設定したときの不正確な挙動の例に付いて説明しています。
 
 ## [Next: Chapter３ スタイリング](../chapters/chapter3.md)
 
