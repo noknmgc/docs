@@ -18,6 +18,7 @@ title: Chapter7 DOM操作 useRef, createPortal
   - [付録：useRefで値を保存する](#付録userefで値を保存する)
 - [createPortal](#createportal)
   - [createPortalの引数](#createportalの引数)
+- [Next: Chapter8 カスタムフック](#next-chapter8-カスタムフック)
 - [Prev: Chapter6 useEffect](#prev-chapter6-useeffect)
 
 
@@ -487,6 +488,8 @@ export default PortalExample;
 上記の例では、`createPortal(children, target)`として、`target`には`document.body`を渡していますが、ここには`HTMLElement`を渡せば良いので、`document.body`以外でも大丈夫です。
 
 例えば、ある特定の要素の下に配置したい場合、`const target = document.querySelector(".container");`として、`<div className="container">{...}</div>`を指定しても良いですし、`useRef`を使って`<div ref={ref}></div>`とした`ref.current`を渡しても良いです。
+
+## [Next: Chapter8 カスタムフック](../chapters/chapter8.md)
 
 ## [Prev: Chapter6 useEffect](../chapters/chapter6.md)
 
