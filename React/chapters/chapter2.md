@@ -16,6 +16,7 @@ title: Chapter2 Reactの基本動作
 - [コンポーネント間の値の受け渡し（props）](#コンポーネント間の値の受け渡しprops)
   - [propsの特殊な例（children）](#propsの特殊な例children)
 - [特殊なコンポーネントReact.Fragment](#特殊なコンポーネントreactfragment)
+- [コンポーネントの表示に配列を使う場合の注意点](#コンポーネントの表示に配列を使う場合の注意点)
 - [Next: Chapter３ スタイリング](#next-chapter３-スタイリング)
 - [Prev: Chapter1 Reactの開発環境の準備](#prev-chapter1-reactの開発環境の準備)
 
@@ -477,6 +478,64 @@ const Hello = () => {
 ```
 
 この`React.Fragment`は、React上では、一つの要素（コンポーネント）と解釈されますが、Reactが最終的に生成するHTMLでは、`React.Fragment`は消えた状態になります。
+
+## コンポーネントの表示に配列を使う場合の注意点
+Reactでは、以下のように配列を使って、コンポーネントやHTML要素を複数表示させることができます。以下の`App`コンポーネントでは、配列`["A", "B", "C"]`を使って、`<div>A</div>`, `<div>B</div>`, `<div>C</div>`を生成しています。
+
+```jsx
+function App() {
+  const sampleList = ["A", "B", "C"];
+  return (
+    <>
+      {sampleList.map((value) => {
+        return <div>{value}</div>;
+      })}
+    </>
+  );
+}
+```
+
+この配列を使った表示をやることに問題はありませんし、むしろ活用してください。ただし、一点だけ注意することがあります。
+
+実際にこのコードを書いてブラウザで実行結果を確認してみるとわかるのですが、コンソールを見てみると以下のような警告が出ているかと思います。
+
+> Warning: Each child in a list should have a unique "key" prop.
+
+これは、リストから生成させたHTML要素（またはコンポーネント）に`key`propにユニークな値を設定してくださいという警告です。以下のように変更する必要があります。
+
+```jsx
+function App() {
+  const sampleList = ["A", "B", "C"];
+  return (
+    <>
+      {sampleList.map((value) => {
+        // key propにvalueを設定
+        return <div key={value}>{value}</div>;
+      })}
+    </>
+  );
+}
+```
+
+この`key`が必要な理由は、ReactがDOMの差分を検知してレンダリングを行う際に、配列で生成された部分は、`key`を元に対応づけを行い、差分を確認しています。そのため、`key`を正しく設定していないと、レンダリングが不正確になってしまいます。
+
+この`key`に設定する値として、配列のindexを指定することも考えられますが、これはNGです。例えば、配列の並び替えが行われた時も、`<div>A</div>`を生成した時は、並び替えが発生する前に`<div>A</div>`を生成した時と同じ`key`である必要があるためです。
+
+```jsx
+// NGな例
+function App() {
+  const sampleList = ["A", "B", "C"];
+  return (
+    <>
+      {sampleList.map((value, index) => {
+        // key propにindexを設定するのはNG！！
+        return <div key={index}>{value}</div>;
+      })}
+    </>
+  );
+}
+```
+
 
 ## [Next: Chapter３ スタイリング](../chapters/chapter3.md)
 
