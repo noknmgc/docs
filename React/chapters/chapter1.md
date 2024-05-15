@@ -11,6 +11,7 @@ title: Chapter1 Reactの開発環境の準備
   - [node.js](#nodejs)
   - [Visual Studio Code　(エディタ)](#visual-studio-codeエディタ)
     - [VSCodeの拡張機能](#vscodeの拡張機能)
+- [Prev: Chapter0 なぜReactを使うのか？](#prev-chapter0-なぜreactを使うのか)
 - [Next: Chapter2 Reactの基本動作](#next-chapter2-reactの基本動作)
 
 
@@ -51,5 +52,7 @@ https://code.visualstudio.com/
   `dsznajder.es7-react-js-snippets`
 
   Reactのスニペット(ショートカット)を使えるようにする
+
+## [Prev: Chapter0 なぜReactを使うのか？](../chapters/chapter0.md)
 
 ## [Next: Chapter2 Reactの基本動作](../chapters/chapter2.md)
