@@ -151,7 +151,7 @@ npm create vite@latest
     Others
 ```
 
-次に、TypescriptかJavascriptを選択します。[SWR](https://swc.rs/)は、高速なコンパイラです。特に理由がなければ、`+ SWR`の方を選択してください。
+次に、TypescriptかJavascriptを選択します。[SWC](https://swc.rs/)は、高速なコンパイラです。特に理由がなければ、`+ SWC`の方を選択してください。
 
 ここでは、Typescriptで解説をしていくので、`TypeScript + SWC`を選択してください。
 ```shell
