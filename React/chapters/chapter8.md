@@ -16,8 +16,8 @@ title: Chapter8 カスタムフック
 - [カスタムフックの実装](#カスタムフックの実装)
   - [準備](#準備)
   - [useCounterの実装](#usecounterの実装)
-- [Prev: Chapter7 DOM操作 useRef, createPortal](#prev-chapter7-dom操作-useref-createportal)
 - [Next: Chapter9 グローバルな状態管理 zustand](#next-chapter9-グローバルな状態管理-zustand)
+- [Prev: Chapter7 DOM操作 useRef, createPortal](#prev-chapter7-dom操作-useref-createportal)
 
 
 ## カスタムフックとは
@@ -236,8 +236,8 @@ export default CounterWithCustomHook;
 `npm run dev`を実行して結果をブラウザで確認してください。
 リファクタリング前と動作が変わらなければ、成功です。
 
-## [Prev: Chapter7 DOM操作 useRef, createPortal](../chapters/chapter7.md)
-
 ## [Next: Chapter9 グローバルな状態管理 zustand](../chapters/chapter9.md)
+
+## [Prev: Chapter7 DOM操作 useRef, createPortal](../chapters/chapter7.md)
 
 <!-- {% endraw %} -->
