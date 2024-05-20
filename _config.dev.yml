@@ -2,6 +2,3 @@ prefix: ""
 repository: noknmgc/docs
 
 theme: jekyll-theme-cayman
-google_analytics: G-JMMJXXVPM9
-plugins:
-  - jekyll-sitemap
