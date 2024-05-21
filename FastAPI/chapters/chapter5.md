@@ -103,7 +103,7 @@ pip install python-multipart
 
 JWTの発行には、`python-jose`を使用します。また、暗号を扱うためのパッケージが追加で必要となるので、ここでは、推奨されている`cryptography`を使用します。以下のコマンドでインストールできます。
 ```bash
-pip install python-jose[cryptography]
+pip install "python-jose[cryptography]"
 ```
 
 ## JWTを作成する関数の実装
@@ -117,7 +117,7 @@ from pydantic import BaseModel
 
 
 class TokenPayload(BaseModel):
-    sub: int
+    sub: str
 ```
 
 スキーマを新しく定義したら、合わせて`app/schemas/__init__.py`も編集しましょう。以下の記述を追加してください。
@@ -147,18 +147,19 @@ settings = Settings()
 
 ```
 
-JWTを作成する関数を実装しましょう。この関数は、`app/core/security.py`に記述します。以下ように変更してください。
+**注意：** ここで、`SECRET_KEY`は、`secrets.token_urlsafe(32)`としていますが、デプロイの際は、`secrets.token_urlsafe(32)`の実行結果を設定するようにしてください。このままだと、APIを起動するごとに`SECRET_KEY`が変わることになり、APIがステートフルになってしまいます。そうなるとロードバランサを導入した際など複数のプロセスで動作させた時に、不都合が生じます。
+
+
+さて、次にJWTを作成する関数を実装しましょう。この関数は、`app/core/security.py`に記述します。以下ように変更してください。
 
 ```python
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
+import bcrypt
 from jose import jwt
-from passlib.context import CryptContext
 
 from app import schemas
 from app.core.config import settings
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ALGORITHM = "HS256"
 
@@ -169,40 +170,43 @@ def create_access_token(
     return_expire=False,
 ):
     if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+        exp = datetime.now(UTC) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(
+        exp = datetime.now(UTC) + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
     to_encode = {key: value for key, value in payload}
-    if "sub" in to_encode:
-        to_encode["sub"] = str(to_encode["sub"])
-    to_encode.update({"exp": expire})
+    to_encode.update({"exp": exp})
+
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
 
     if return_expire:
-        return encoded_jwt, expire
+        return encoded_jwt, exp
     else:
         return encoded_jwt
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    pwd_bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
+    return hashed_password.decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
-
+    pwd_bytes = plain_password.encode("utf-8")
+    hashed_pwd_bytes = hashed_password.encode("utf-8")
+    return bcrypt.checkpw(password=pwd_bytes, hashed_password=hashed_pwd_bytes)
 ```
 
 
 ## JWTを発行するエンドポイントの実装
 ここでは、`POST` `/login/token`にJWTを発行するエンドポイントを実装します。
 
-まず、トークンの発行にあたり、ユーザー認証を行う必要があります。そこで`app/crud/crud_user.py`の`CRUDUser`クラスにユーザー認証を行うメソッドを追加しましょう。このメソッドで`signin_id`と`password`が正しいか確認します。`app/crud/crud_user.py`の`CRUDUser`に以下のメソッドを追加してください。
+まず、トークンの発行にあたり、ユーザー認証を行う必要があります。そこで`app/crud/user.py`の`CRUDUser`クラスにユーザー認証を行うメソッドを追加しましょう。このメソッドで`signin_id`と`password`が正しいか確認します。`app/crud/user.py`の`CRUDUser`に以下のメソッドを追加してください。
 
-`app/crud/crud_user.py`
+`app/crud/user.py`
 
 ```python
 from app.core.security import verify_password
@@ -242,14 +246,11 @@ from .token import TokenPayload, Token
 `app/api/endpoints/auth.py`
 
 ```python
-from datetime import timedelta
-
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.core.config import settings
 from app.core import security
 from app import schemas, crud
 
@@ -263,10 +264,8 @@ def login(
     user = crud.user.authenticate(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect id or password")
-    payload = schemas.TokenPayload(sub=user.id)
-    access_token = security.create_access_token(
-        payload, expires_delta=timedelta(settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
+    payload = schemas.TokenPayload(sub=str(user.id))
+    access_token = security.create_access_token(payload)
     return {"access_token": access_token, "token_type": "bearer"}
 ```
 
@@ -303,7 +302,7 @@ IDやパスワードを間違えていると以下のようなレスポンスに
 ```python
 from typing import Generator
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
@@ -336,7 +335,7 @@ def get_current_user(
         token_data = schemas.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=403,
             detail="Could not validate credentials",
         )
     user = crud.user.read(db, id=token_data.sub)
@@ -472,9 +471,9 @@ Swagger UIの機能で、先ほどのモーダル画面から取得したトー�
 
 実際に、この方法でも実装することができますが、使いまわしが容易で、ロジックが分離されているように実装するため、パスオペレーション関数の依存関係として、`get_current_user`ではなく、`get_current_admin_user`を実装しましょう。`get_current_admin_user`では、トークンに記述されているIDのユーザー情報をDBから読み込み、そのユーザーがadminであるか判定を行います。
 
-まず、ユーザーがアドミンであるかを判定するメソッドを`app/curd/crud_user.py`の`CRUDUser`クラスに加えましょう。以下のメソッドを`CRUDUser`クラスに追加してください。
+まず、ユーザーがアドミンであるかを判定するメソッドを`app/curd/user.py`の`CRUDUser`クラスに加えましょう。以下のメソッドを`CRUDUser`クラスに追加してください。
 
-`app/crud/crud_user.py`
+`app/crud/user.py`
 
 ```python
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
