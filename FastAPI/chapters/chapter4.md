@@ -14,7 +14,8 @@ title: Chapter4 DBとの連携
 - [設定ファイルの追加](#設定ファイルの追加)
 - [DB 接続クラス](#db-接続クラス)
 - [DB モデルの定義](#db-モデルの定義)
-- [DB マイグレーション](#db-マイグレーション)
+- [DB マイグレーション(sqlalchemy)](#db-マイグレーションsqlalchemy)
+  - [注意点](#注意点)
 - [CRUDsの実装](#crudsの実装)
 - [テスト用ユーザーデータの登録（スキップ可）](#テスト用ユーザーデータの登録スキップ可)
 - [usersエンドポイントの実装](#usersエンドポイントの実装)
@@ -42,11 +43,7 @@ PostgreSQL では、`psycopg2`が必要になります。ただし、`psycopg2`�
 pip install psycopg2-binary
 ```
 
-また、DBにユーザー情報を登録するので、その際にパスワードのハッシュ化を行います。パスワードのハッシュ化には、`passlib`を使います。また、ハッシュ化には`bcrypt`も使用します。以下のコマンドでインストールしてください。
-
-```bash
-pip install passlib
-```
+また、DBにユーザー情報を登録するので、その際にパスワードのハッシュ化を行います。パスワードのハッシュ化には、`bcrypt`を使用します。以下のコマンドでインストールしてください。
 
 ```bash
 pip install bcrypt
@@ -136,9 +133,9 @@ def test(db: Session = Depends(get_db)):
 
 ## DB モデルの定義
 
-ここから、SQLAlchemy を使って DB モデルを定義していきます。通常、DB モデルは、`sqlalchemy.orm`の`declarative_base`を使い、`Base = declarative_base()`とした`Base`クラスを継承します。ここでは、DB モデルのテーブル名をクラス名から自動的に作るように以下のように`Base`クラスを`app/db/base.py`に定義します。
+ここから、SQLAlchemy を使って DB モデルを定義していきます。通常、DB モデルは、`sqlalchemy.orm`の`declarative_base`を使い、`Base = declarative_base()`とした`Base`クラスを継承します。ここでは、DB モデルのテーブル名をクラス名から自動的に作るように以下のように`Base`クラスを`app/db/base_class.py`に定義します。
 
-`app/db/base.py`
+`app/db/base_class.py`
 
 ```python
 from typing import Any
@@ -163,7 +160,7 @@ class Base:
 ```python
 from sqlalchemy import Column, Integer, String
 
-from app.db.base import Base
+from app.db.base_class import Base
 
 
 class User(Base):
@@ -184,7 +181,7 @@ Chapter3 では、疑似的な DB には、パスワードをそのまま保存�
 from .user import User
 ```
 
-## DB マイグレーション
+## DB マイグレーション(sqlalchemy)
 
 作成した ORM モデルを利用して、DB マイグレーション用のスクリプト`app/migrate.py`を作成します。
 
@@ -193,7 +190,7 @@ from .user import User
 ```python
 from sqlalchemy import create_engine
 
-from app.db.base import Base
+from app.db.base_class import Base
 from app.core.config import settings
 import app.models
 
@@ -220,6 +217,12 @@ python -m app.migrate
 SELECT * FROM "user";
 ```
 
+### 注意点
+このマイグレーションは、同じ名前のテーブルがすでに定義されている場合、そのテーブルを削除してテーブルを作り直しています。
+
+開発途中で、テーブルの定義が変わった時に、すでにテーブルに保存されているデータを引き継いで欲しいことがあるかと思います。その際、このマイグレーションでは対応ができません。そこで、`alembic`というマイグレーション用のライブラリを使うことで、データの引き継ぎをしつつ、マイグレーションを行うことができるようになります。
+これについては、後の章で紹介します。
+
 ## CRUDsの実装
 ここでは、DBのCRUD(IO処理)を記述していきます。CRUDとは、永続的なデータを取り扱うソフトウェアに要求される4つの基本機能である、データの作成（Create）、読み出し（Read）、更新（Update）、削除（Delete）の頭文字を繋げた言葉です。`app/crud`ディレクトリにファイルを作成します。
 ここでは、CRUD操作のベースとなるクラスを定義します。以下のファイルを作成してください。
@@ -234,7 +237,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.db.base import Base
+from app.db.base_class import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -279,7 +282,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if isinstance(obj_in, dict):
             update_data = obj_in
         else:
-            update_data = obj_in.dict(exclude_unset=True)
+            update_data = obj_in.model_dump(exclude_unset=True)
         for field in obj_data:
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
@@ -297,11 +300,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
 それぞれのモデルに対して、CRUD操作を行うクラスを定義するのですが、そのクラスは、この`CRUDBase`クラスを継承し、必要に応じて、CRUD操作をオーバーライドしたり、新しくメソッドを定義したりします。
 
-それでは、`User`モデルに対するCRUD操作を行うクラスを定義しましょう。DBでは、Userのパスワードは、そのまま保存せず、ハッシュ化して保存します。そのため、CreateやUpdateの際、リクエストの`password`をハッシュ化し、`hashed_password`に保存する必要があります。また、Readの際も、DBのidではなく、`signin_id`で読み込めるようにします。
+それでは、`User`モデルに対するCRUD操作を行うクラスを定義しましょう。DBでは、Userのパスワードは、そのまま保存せず、ハッシュ化して保存します。そのため、CreateやUpdateの際、リクエストの`password`をハッシュ化し、`hashed_password`に保存する必要があります。また、Readの際もDBのidではなく、`signin_id`で読み込めるようにします。
 
 `User`モデルのCRUD操作を行うクラスは、以下のようになります。ファイルを作成してください。
 
-`app/crud/crud_user.py`
+`app/crud/user.py`
 
 ```python
 from typing import Dict, Any, Optional
@@ -354,29 +357,32 @@ user = CRUDUser(User)
 
 `app/crud/__init__.py`
 ```python
-from .crud_user import user
+from .user import user
 ```
 
 ここでは、パスワードのハッシュ化が仮の物になっているので、次はパスワードのハッシュ化を実装します。パスワードのハッシュ化やこの後実装するJson Web Tokenの発行などは、`app/core/security.py`に記述します。パスワードのハッシュ化と同時にパスワードの検証も実装します。以下のファイルを作成してください。
 
 `app/core/security.py`
 ```python
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    pwd_bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
+    return hashed_password.decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    pwd_bytes = plain_password.encode("utf-8")
+    hashed_pwd_bytes = hashed_password.encode("utf-8")
+    return bcrypt.checkpw(password=pwd_bytes, hashed_password=hashed_pwd_bytes)
 ```
 
-ここで作成した`get_password_hash`を`CRUDUser`で使います。`app/crud/crud_user.py`に定義した`CRUDUser`クラスの`__hash_password`メソッドを以下のように編集してください。
+ここで作成した`get_password_hash`を`CRUDUser`で使います。`app/crud/user.py`に定義した`CRUDUser`クラスの`__hash_password`メソッドを以下のように編集してください。
 
-`app/crud/crud_user.py`
+`app/crud/user.py`
 ```python
 from app.core.security import get_password_hash
 
@@ -444,13 +450,14 @@ SELECT * FROM "user";
 
 `app/schemas/user.py`
 ```python
+from pydantic import ConfigDict
+
 class UserResponse(BaseModel):
     signin_id: str
     name: str
-    role: str
+    role: Literal["Admin", "User"]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 ```
 
 こうすることで、DBのモデルである`User`をスキーマの`UserResponse`に変換できるようになります。それでは、それぞれのエンドポイントを書き換えていきましょう。ここからは、`app/api/endpoints/users.py`に定義した擬似的なDB`fake_user_db`は使わないので、削除してください。また、同じファイルで定義している`User`も使わないので、これも削除してください。
