@@ -482,6 +482,7 @@ fake_user_db = [User(signin_id="tarou", password="tarou", name="太郎", role="U
 
 ここからは、DBとの接続も行うので、`models`、`crud`が必要になります。また、それぞれのパスオペレーション関数の引数に`db: Session = Depends(get_db)`が必要となります。importを以下のように編集してください。
 
+`app/api/endpoints/users.py`
 ```python
 from typing import List
 
@@ -489,7 +490,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app import crud, schemas, models
+from app import crud, schemas
 ```
 
 `app/api/endpoints/users.py`に定義したパスオペレーション関数をそれぞれ編集してください。
