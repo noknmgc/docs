@@ -1,5 +1,6 @@
 ---
 title: Chapter5 セキュリティの実装
+mermaid: true
 ---
 
 <!-- omit in toc -->
