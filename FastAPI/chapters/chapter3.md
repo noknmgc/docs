@@ -17,6 +17,7 @@ title: Chapter3 エンドポイントの作成
 - [作成するエンドポイント](#作成するエンドポイント)
 - [スキーマの定義](#スキーマの定義)
 - [パスオペレーション関数の定義](#パスオペレーション関数の定義)
+- [パスオペレーション関数のdescription](#パスオペレーション関数のdescription)
 - [Next: Chapter4 DBとの連携](#next-chapter4-dbとの連携)
 - [Prev: Chapter2 ディレクトリ構成](#prev-chapter2-ディレクトリ構成)
 
@@ -77,10 +78,12 @@ def read_item(item_id: int):
   "detail": [
     {
       "type": "int_parsing",
-      "loc": ["path", "item_id"],
+      "loc": [
+        "path",
+        "item_id"
+      ],
       "msg": "Input should be a valid integer, unable to parse string as an integer",
-      "input": "foo",
-      "url": "https://errors.pydantic.dev/2.1/v/int_parsing"
+      "input": "foo"
     }
   ]
 }
@@ -116,7 +119,7 @@ http://127.0.0.1:8000/items/?skip=1&limit=20
 
 FastAPI では、リクエストボディは pydantic を利用して型を定義します。この型を定義は、スキーマと呼び`app/schema`ディレクトリにファイルを作っていきます。以下のファイルを作成しましょう。
 
-`app/schema/root.py`
+`app/schemas/root.py`
 
 ```python
 from pydantic import BaseModel
@@ -221,9 +224,9 @@ api_router.include_router(users.router, tags=["users"], prefix="/users")
 - `PUT` `/users/{singin_id}`
   ユーザーデータの更新
 
-スキーマをそれぞれ`UserCreate`、`UserUpdate`として定義します。スキーマの定義は、`app/schema`ディレクトリで行います。以下のファイルを追加してください。
+スキーマをそれぞれ`UserCreate`、`UserUpdate`として定義します。スキーマの定義は、`app/schemas`ディレクトリで行います。以下のファイルを追加してください。
 
-`app/schema/user.py`
+`app/schemas/user.py`
 
 ```python
 from typing import Optional
@@ -244,9 +247,9 @@ class UserUpdate(BaseModel):
     name: str | None = None
 ```
 
-また、レスポンスボディとして返すスキーマも定義します。password をレスポンスとして返すわけにはいかないので、password 以外の閲覧してもいいようなデータをレスポンスとして返しましょう。`app/schema/user.py`に以下のスキーマを追加してください。
+また、レスポンスボディとして返すスキーマも定義します。password をレスポンスとして返すわけにはいかないので、password 以外の閲覧してもいいようなデータをレスポンスとして返しましょう。`app/schemas/user.py`に以下のスキーマを追加してください。
 
-`app/schema/user.py`
+`app/schemas/user.py`
 
 ```python
 class UserResponse(BaseModel):
@@ -302,7 +305,7 @@ from app import schemas
   ```python
   @router.post("", response_model=schemas.UserResponse)
   def create_user(user_create: schemas.UserCreate):
-      user = User(**user_create.dict())
+      user = User(**user_create.model_dump())
       fake_user_db.append(user)
       return user
   ```
@@ -322,6 +325,8 @@ from app import schemas
   ユーザーデータの更新
 
   ```python
+  from fastapi import HTTPException
+
   @router.put("/{signin_id}", response_model=schemas.UserResponse)
   def update_user(signin_id: str, update_user: schemas.UserUpdate):
       update_dict = {}
@@ -334,7 +339,7 @@ from app import schemas
           raise HTTPException(status_code=404, detail="User not found")
 
       index = user_ids.index(signin_id)
-      new_user = User(**fake_user_db[index].dict())
+      new_user = User(**fake_user_db[index].model_dump())
       for key in update_dict:
           setattr(new_user, key, update_dict[key])
       fake_user_db[index] = new_user
@@ -369,6 +374,50 @@ def read_user(skip: int = 0, limit: int = 100):
 `response_model`を指定してあげると、自動的にスキーマに変換してくれます。上の関数で、`fake_user_db`は、`List[User]`という型ですが、`response_model`を定義したことにより、`List[schemas.UserResponse]`に変換されてレスポンスが返されます。
 
 [SwaggerUI](http://127.0.0.1:8000/docs)で、いろいろ試して動作を確認してみましょう。
+
+## パスオペレーション関数のdescription
+パスオペレーション関数にpythonのdocstringsをつけることで、SwaggerUIにdescriptionを追加することができます。
+もちろん、pythonのdocstringなので、pythonのドキュメントにもなります。積極的にdocstringsを付けていきましょう。
+
+ここでは、例として`create_user`にdocstringsを付けてみます。
+
+`app/endpoints/users.py`
+```python
+@router.post("", response_model=schemas.UserResponse)
+def create_user(user_create: schemas.UserCreate):
+    """
+    ユーザーの作成
+    """
+    user = User(**user_create.model_dump())
+    fake_user_db.append(user)
+    return user
+```
+
+SwaggerUIでは、以下のようになります。
+
+![description付きのSwaggerUI](../images/ch3_description.png)
+
+また、SwaggerUIはmarkdown記法にも対応しています。
+
+`app/endpoints/users.py`
+```python
+@router.post("", response_model=schemas.UserResponse)
+def create_user(user_create: schemas.UserCreate):
+    """
+    ユーザーの作成
+    - **singin_id**: ユニークなID
+    - **name**: 名前
+    - **password**: パスワード
+    - **role**: 権限
+    """
+    user = User(**user_create.model_dump())
+    fake_user_db.append(user)
+    return user
+```
+
+このようにmarkdown記法で記述するとSwaggerUIでは、以下のように表示されます。
+
+![markdownで記述したdescription付きのSwaggerUI](../images/ch3_description_markdown.png)
 
 ## [Next: Chapter4 DBとの連携](../chapters/chapter4.md)
 
