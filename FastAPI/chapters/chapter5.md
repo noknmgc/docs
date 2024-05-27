@@ -27,6 +27,7 @@ mermaid: true
   - [Cookieの削除(ログアウト処理)](#cookieの削除ログアウト処理)
   - [Swagger UIの動作を戻す](#swagger-uiの動作を戻す)
 - [おまけ](#おまけ)
+- [Next: Chapter6 Alembicを使ったマイグレーション](#next-chapter6-alembicを使ったマイグレーション)
 - [Prev: Chapter4 DBとの連携](#prev-chapter4-dbとの連携)
 
 ## Json Web Token(JWT)とは
@@ -829,5 +830,7 @@ def update_myself(
     user = crud.user.update(db, user_update, current_user)
     return user
 ```
+
+## [Next: Chapter6 Alembicを使ったマイグレーション](../chapters/chapter6.md)
 
 ## [Prev: Chapter4 DBとの連携](../chapters/chapter4.md)
