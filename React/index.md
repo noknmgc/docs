@@ -22,3 +22,4 @@ title: React
 - [Chapter9 グローバルな状態管理zustand](./chapters/chapter9.md)
 - [(作成中)ChapterX ディレクトリ構成](.)
 - [Appendix A](./chapters/AppendixA.md)
+- [演習1 コンポーネント指向](./chapters/exercise1.md)
