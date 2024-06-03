@@ -2,6 +2,7 @@ prefix: "/docs"
 repository: noknmgc/docs
 
 theme: jekyll-theme-cayman
+exclude: ["Dockerfile", "docker-compose.yml"]
 google_analytics: G-JMMJXXVPM9
 plugins:
   - jekyll-sitemap
