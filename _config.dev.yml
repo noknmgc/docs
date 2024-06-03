@@ -2,3 +2,4 @@ prefix: ""
 repository: noknmgc/docs
 
 theme: jekyll-theme-cayman
+exclude: ["Dockerfile", "docker-compose.yml", "README.md"]
