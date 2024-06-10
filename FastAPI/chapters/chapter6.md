@@ -13,6 +13,7 @@ title: Chapter6 Alembicを使ったマイグレーション
 - [Alembicの使い方](#alembicの使い方)
   - [初回導入](#初回導入)
     - [セットアップ](#セットアップ)
+    - [`app/db/base.py`作成](#appdbbasepy作成)
     - [`env.py`修正](#envpy修正)
     - [マイグレーション](#マイグレーション)
   - [変更時](#変更時)
@@ -69,6 +70,15 @@ alembic init "alembic"
 	├── env.py
 	├── script.py.mako
 	└── versions
+```
+
+#### `app/db/base.py`作成
+alembicがマイグレーションを行うSQLAlchemyをでマイグレーションを行うモデルを全て認識させるために、以下のファイルを作成します。
+
+`app/db/base.py`
+```python
+from app.db.base_class import Base
+from app.models import *
 ```
 
 #### `env.py`修正
