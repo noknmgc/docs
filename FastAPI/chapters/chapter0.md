@@ -41,7 +41,7 @@ conda create -n {仮想環境名} python=3.12
 #### Condaの基本的な使い方
 - 仮装環境の作成
   ```shell
-  conda remove -n {仮想環境名} --all
+  conda create -n {仮想環境名} python=X.XX.X
   ```
 - 仮装環境の有効化・無効化
   - 有効化
